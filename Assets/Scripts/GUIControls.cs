@@ -96,7 +96,12 @@ public class GUIControls : MonoBehaviour {
 		PlayerPrefs.SetInt("bestDistance", bestDistance);
 		GameObject.Find ("BestDistance").GetComponent<TextMesh>().text = "Best Distance: " + bestDistance.ToString();
 		GameObject.Find ("ThisDistance").GetComponent<TextMesh>().text = "This Round: " + distance.ToString();
-		menu.SendMessage("MenuOn");
+		GameObject.Find ("Close").SendMessage("Reset");
+		GameObject.Find ("Far").SendMessage("Reset");
+		GameObject.Find ("Mid").SendMessage("Reset");
+		GameObject.Find ("Obstacles").SendMessage("Reset");
+		//menu.SendMessage("MenuOn");
+		Reset ();
 	}
 	
 	void Reset () {

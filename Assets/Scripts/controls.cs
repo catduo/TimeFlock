@@ -21,7 +21,7 @@ public class controls : MonoBehaviour {
 	
 	public static Vector3 StartingPosition = new Vector3(5.0f, 5.0f, 0.0f);
 	
-	BirdState currState;
+	static public BirdState currState;
 	List<BirdInputState> inputs;
 	List<BirdRewindState> rewind;
 	int currFrame;
@@ -29,6 +29,7 @@ public class controls : MonoBehaviour {
 	public float force = 20;
 	
 	public void InitState(BirdState s) {
+		Debug.Log (currState);
 		currState = s;
 		if (s == BirdState.Dead) {
 			this.enabled = false;

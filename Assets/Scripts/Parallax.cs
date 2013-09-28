@@ -5,7 +5,7 @@ public class Parallax : MonoBehaviour {
 	
 	public float movementSpeed;
 	private float distanceTravelled;
-	private float rewindSpeed = 20;
+	private float rewindSpeed = 5;
 	private int rewindFrames = 0;
 	
 	// Use this for initialization
@@ -20,9 +20,10 @@ public class Parallax : MonoBehaviour {
 	}
 	
 	void Reset () {
-		while(false){
+		while((rewindFrames + 2) * rewindSpeed * movementSpeed < distanceTravelled){
 			transform.Translate(new Vector3(movementSpeed * rewindSpeed, 0, 0));
 			rewindFrames++;
 		}
+		transform.Translate(new Vector3(distanceTravelled - (rewindFrames + 2) * rewindSpeed * movementSpeed, 0, 0));
 	}
 }
