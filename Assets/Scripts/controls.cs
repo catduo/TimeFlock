@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public struct BirdRewindState {
 	public float PosX, PosY;
-	public int Alive;
+	public bool Alive;
 }
 
 public struct BirdInputState {
@@ -36,11 +36,10 @@ public class controls : MonoBehaviour {
 			this.gameObject.SetActive(false);
 		}
 		else {
-			this.enabled = true;
-			this.gameObject.SetActive(true);
-			
 			if (s == BirdState.PlayerControlled) {
 				inputs.Clear();
+				this.enabled = true;
+				this.gameObject.SetActive(true);
 			}
 			
 			if (s == BirdState.PlayerControlled || s == BirdState.Replaying) {
@@ -75,6 +74,12 @@ public class controls : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
 		if (currState == BirdState.Dead) {
+			// Add a "dead" rewind state
+			var brs = new BirdRewindState();
+			brs.PosX = transform.position.x;
+			brs.PosY = transform.position.y;
+			brs.Alive = false;
+			rewind.Add (brs);
 			return;
 		}
 		
@@ -115,6 +120,7 @@ public class controls : MonoBehaviour {
 		var brs = new BirdRewindState();
 		brs.PosX = transform.position.x;
 		brs.PosY = transform.position.y;
+		brs.Alive = true;
 		rewind.Add (brs);
 	}
 	
@@ -130,7 +136,16 @@ public class controls : MonoBehaviour {
 		if (currFrame < 0) {
 			return;
 		}
-		transform.position = new Vector3(rewind[currFrame].PosX, rewind[currFrame].PosY, 0.0f);
+		
+		if (rewind[currFrame].Alive) {
+			this.enabled = true;
+			this.gameObject.SetActive(true);
+			transform.position = new Vector3(rewind[currFrame].PosX, rewind[currFrame].PosY, 0.0f);
+		}
+		else {
+			this.enabled = false;
+			this.gameObject.SetActive(false);
+		}
 		currFrame -= 1;
 	}
 	
