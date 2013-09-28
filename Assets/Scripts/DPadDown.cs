@@ -16,6 +16,6 @@ public class DPadDown : MonoBehaviour {
 	}
 	
 	void Hold () {
-		bird.SendMessage("controlDown");
+		DPad.VAxis = -1;
 	}
 }
