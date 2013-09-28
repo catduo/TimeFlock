@@ -27,7 +27,7 @@ public class controls : MonoBehaviour {
 	List<BirdRewindState> rewind;
 	int currFrame;
 	
-	public float force = 20;
+	public float movementForce = 50.0f;
 	
 	void SetRender(bool r) {
 		foreach (Transform t in transform) {
@@ -129,13 +129,15 @@ public class controls : MonoBehaviour {
 	}
 	
 	public void ApplyInputs(BirdInputState bis) {
-		rigidbody.AddForce(bis.HAxis * force, bis.VAxis * force, 0.0f);
+		rigidbody.AddForce(bis.HAxis * movementForce, bis.VAxis * movementForce, 0.0f);
+		rigidbody.velocity = rigidbody.velocity / 1.05f;
+		keepInBounds();
+		
 		var brs = new BirdRewindState();
 		brs.PosX = transform.position.x;
 		brs.PosY = transform.position.y;
 		brs.Alive = true;
 		rewind.Add (brs);
-		keepInBounds();
 	}
 	
 	void DoReplay() {

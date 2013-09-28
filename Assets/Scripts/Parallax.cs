@@ -18,12 +18,14 @@ public class Parallax : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+		float movement = movementSpeed * (1.0f + (GUIControls.distance / 500.0f));
+		
 		if (!GUIControls.IsRewinding) {
-			transform.Translate(new Vector3(-movementSpeed, 0, 0));
+			transform.Translate(new Vector3(-movement, 0, 0));
 			distanceTravelled += movementSpeed;
 		}
 		else {
-			transform.Translate(new Vector3(movementSpeed, 0, 0));
+			transform.Translate(new Vector3(movement, 0, 0));
 		}
 	}
 	
