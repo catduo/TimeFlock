@@ -19,21 +19,14 @@ public class controls : RewindableObject<bool> {
 	
 	public BirdState CurrState;
 	List<BirdInputState> inputs;
-	List<BirdRewindState> rewind;
 	int currFrame;
 	
 	public float movementForce = 50.0f;
 	
-	void SetRender(bool r) {
-		foreach (Transform t in transform) {
-			t.gameObject.renderer.enabled = r;
-		}
-	}
-	
 	public void InitState(BirdState s) {
 		CurrState = s;
 		if (s == BirdState.Dead) {
-			SetRender(false);
+			SetDrawn(false);
 		}
 		else {
 			if (s == BirdState.PlayerControlled) {
@@ -45,16 +38,11 @@ public class controls : RewindableObject<bool> {
 			}
 			
 			if (s == BirdState.PlayerControlled || s == BirdState.Replaying) {
-				SetRender(true);
+				SetDrawn(true);
 				
 				currFrame = 0;
-				rewind.Clear();
+				ResetRewind();
 				rigidbody.velocity = Vector3.zero;
-			}
-			else if (s == BirdState.Rewinding) {
-				currFrame = rewind.Count-1;
-				var rs = rewind[currFrame];
-				transform.position = new Vector3(rs.PosX, rs.PosY, 0.0f);
 			}
 		}
 	}
@@ -68,21 +56,20 @@ public class controls : RewindableObject<bool> {
 	}
 	
 	// Use this for initialization
-	void Start () {
+	override protected void Start () {
+		base.Start ();
 		inputs = new List<BirdInputState>();
-		rewind = new List<BirdRewindState>();
 		InitState(BirdState.PlayerControlled);
 	}
 	
+	override protected void FixedUpdate() {
+		base.FixedUpdate();
+	}
+	
 	// Update is called once per frame
-	void FixedUpdate () {
+	override protected void ForwardFixedUpdate () {
 		if (CurrState == BirdState.Dead) {
-			// Add a "dead" rewind state
-			var brs = new BirdRewindState();
-			brs.PosX = transform.position.x;
-			brs.PosY = transform.position.y;
-			brs.Alive = false;
-			rewind.Add (brs);
+			AddRewindState(false);
 			return;
 		}
 		
@@ -94,9 +81,6 @@ public class controls : RewindableObject<bool> {
 			break;
 		case BirdState.Replaying:
 			DoReplay();
-			break;
-		case BirdState.Rewinding:
-			DoRewind();
 			break;
 		}
 	}
@@ -123,11 +107,7 @@ public class controls : RewindableObject<bool> {
 		rigidbody.velocity = rigidbody.velocity / 1.05f;
 		keepInBounds();
 		
-		var brs = new BirdRewindState();
-		brs.PosX = transform.position.x;
-		brs.PosY = transform.position.y;
-		brs.Alive = true;
-		rewind.Add (brs);
+		AddRewindState(false);
 	}
 	
 	void DoReplay() {
@@ -138,15 +118,10 @@ public class controls : RewindableObject<bool> {
 		}
 	}
 	
-	void DoRewind() {
-		rigidbody.velocity = Vector3.zero;
-		if (currFrame < 0) {
-			return;
-		}
-		
-		SetRender (rewind[currFrame].Alive);
-		transform.position = new Vector3(rewind[currFrame].PosX, rewind[currFrame].PosY, 0.0f);
-		currFrame -= 1;
+	override protected void ApplyCustom(bool custom) {
+	}
+	
+	override protected void DoneRewinding() {
 	}
 	
 	// Supposed to slow down when approaching the borders; not quite working yet

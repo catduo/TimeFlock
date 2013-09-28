@@ -14,9 +14,11 @@ public class Rewinder : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (rewinding) {
-			Time.timeScale = (Time.realtimeSinceStartup - rewindStartTime) * 3.0f;
-			if (Time.timeScale > 6.0f) {
-				Time.timeScale = 6.0f;
+			var timeSinceRewind = (Time.realtimeSinceStartup - rewindStartTime);
+			var easeScale = timeSinceRewind;
+			Time.timeScale = easeScale * 10.0f;
+			if (Time.timeScale > 40.0f) {
+				Time.timeScale = 40.0f;
 			}
 			
 			if (GUIControls.distance <= 0) {
@@ -35,7 +37,7 @@ public class Rewinder : MonoBehaviour {
 		
 		// Rewind all birds
 		foreach (var bird in GUIControls.FindAllBirds()) {
-			bird.GetComponent<controls>().InitState(BirdState.Rewinding);
+			bird.GetComponent<controls>().StartRewind();
 		}
 	}
 }

@@ -14,13 +14,13 @@ public struct ObjectRewindState<T> where T : struct {
 	public T Custom;
 }
 
-public class RewindableObject<T> : MonoBehaviour {
+public class RewindableObject<T> : MonoBehaviour where T: struct {
 	
 	public bool Rewinding;
-	int currFrame;
+	int currRewindFrame;
 	List<ObjectRewindState<T>> states;
 	
-	bool IsDrawn() {
+	public bool IsDrawn() {
 		if (GetComponent<Renderer>() != null) {
 			return renderer.enabled;
 		}
@@ -34,45 +34,46 @@ public class RewindableObject<T> : MonoBehaviour {
 		return true;
 	}
 	
-	void SetDrawn(bool r) {
+	public void SetDrawn(bool r) {
 		if (GetComponent<Renderer>() != null) {
-			renderer.enabled = true;
+			renderer.enabled = r;
 		}
 		
 		foreach (Transform child in transform) {
 			if (child.gameObject.GetComponent<Renderer>() != null) {
-				child.gameObject.renderer.enabled = true;
+				child.gameObject.renderer.enabled = r;
 			}
 		}
 	}
 	
 	public void StartRewind() {
 		Rewinding = true;
-		currFrame = 0;
+		currRewindFrame = states.Count-1;
 		if (rigidbody != null) rigidbody.velocity = Vector3.zero;
 	}
 	
 	public void ResetRewind() {
 		states.Clear();
-		currFrame = 0;
+		currRewindFrame = 0;
 		Rewinding = false;
 	}
 
-	virtual void Start () {
-		states = new List<ObjectRewindState>();
+	virtual protected void Start () {
+		states = new List<ObjectRewindState<T>>();
+		SetDrawn(true);
 		ResetRewind();
 	}
 	
-	void FixedUpdate() {
+	virtual protected void FixedUpdate() {
 		if (Rewinding) {
-			var ors = states[currFrame];
+			var ors = states[currRewindFrame];
 			transform.position = ors.Pos;
 			if (rigidbody != null) rigidbody.velocity = Vector3.zero;
 			SetDrawn(ors.Drawn);
 			ApplyCustom(ors.Custom);
 			
-			currFrame -= 1;
-			if (currFrame < 0) {
+			currRewindFrame -= 1;
+			if (currRewindFrame < 0) {
 				// Done rewinding
 				Rewinding = false;
 				DoneRewinding();
@@ -80,24 +81,25 @@ public class RewindableObject<T> : MonoBehaviour {
 		}
 		else {
 			ForwardFixedUpdate();
+			currRewindFrame += 1;
 		}
 	}
 	
-	virtual void ApplyCustom(T custom) {
+	virtual protected void ApplyCustom(T custom) {
 	}
 	
-	virtual void ForwardFixedUpdate() {
+	virtual protected void ForwardFixedUpdate() {
 	}
 	
-	virtual void DoneRewinding() {
+	virtual protected void DoneRewinding() {
 	}
 	
-	void AddRewindState(T custom) {
-		var ors = new ObjectRewindState();
+	protected void AddRewindState(T custom) {
+		var ors = new ObjectRewindState<T>();
 		ors.Pos = transform.position;
 		ors.Drawn = IsDrawn();
 		ors.Custom = custom;
 		states.Add (ors);
-		currFrame += 1;
+		currRewindFrame += 1;
 	}
 }
