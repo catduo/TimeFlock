@@ -17,9 +17,8 @@ public class Obstacle : MonoBehaviour {
 		if(other.name == "FlockZone(Clone)"){
 			
 		}
-		else{
+		else {
 			GUIControls.GameOver();
-			GameObject.Find ("CurrentBird").GetComponent<controls>().InitState(BirdState.Rewinding);
 		}
 	}
 }

@@ -21,7 +21,7 @@ public class controls : MonoBehaviour {
 	
 	public static Vector3 StartingPosition = new Vector3(5.0f, 5.0f, 0.0f);
 	
-	static public BirdState currState;
+	public BirdState currState;
 	List<BirdInputState> inputs;
 	List<BirdRewindState> rewind;
 	int currFrame;

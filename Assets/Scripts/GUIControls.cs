@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class GUIControls : MonoBehaviour {
 	
@@ -9,7 +9,10 @@ public class GUIControls : MonoBehaviour {
 	private GameObject distanceText;
 	private AudioSource audioSource;
 	
-	static public float distance;
+	public Transform BirdPrefab;
+	
+	static public int NumBirdsUsed = 0;
+	static public float distance = 0.0f;
 	static private float bestDistance;
 	
 	static public bool IsRewinding = false;
@@ -117,11 +120,33 @@ public class GUIControls : MonoBehaviour {
 		GameObject.Find ("Mid").SendMessage("Reset");
 		GameObject.Find ("Obstacles").SendMessage("Reset");
 		
-		// TODO: reset all birds
+		// Reset all birds
+		foreach (var bird in FindAllBirds()) {
+			bird.GetComponent<controls>().InitState(BirdState.Replaying);
+		}
+		var player = GameObject.Find ("CurrentBird");
+		player.name = "GhostBird" + NumBirdsUsed;
+		player.transform.parent = GameObject.Find ("OtherBirds").transform;
+		NumBirdsUsed += 1;
+		
+		// Make a new player bird
+		var newPlayer = (Transform)(Instantiate(BirdPrefab, Vector3.zero, Quaternion.identity));
+		newPlayer.GetComponent<controls>().InitState(BirdState.PlayerControlled);
+		newPlayer.name = "CurrentBird";
+		newPlayer.transform.parent = GameObject.Find ("World").transform;
 	}
 	
 	public void WaitForStart() {
 		// TODO
 		//menu.SendMessage("MenuOn");
+	}
+			
+	public static IList<GameObject> FindAllBirds() {
+		var ret = new List<GameObject>();
+		ret.Add (GameObject.Find ("CurrentBird"));
+		foreach (Transform t in GameObject.Find ("OtherBirds").transform) {
+			ret.Add (t.gameObject);
+		}
+		return ret;
 	}
 }
