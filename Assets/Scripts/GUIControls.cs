@@ -102,7 +102,7 @@ public class GUIControls : MonoBehaviour {
 	
 	//update the distance text
 	void UpdateDistance () {
-		distanceText.GetComponent<TextMesh>().text = "Distance: " + distance.ToString();
+		distanceText.GetComponent<TextMesh>().text = "Distance: " + Mathf.RoundToInt (distance).ToString();
 	}
 	
 	//when the game ends put up a menu that lets you restart
@@ -114,8 +114,8 @@ public class GUIControls : MonoBehaviour {
 			bestDistance = distance;
 		}
 		PlayerPrefs.SetFloat("bestDistance", bestDistance);
-		GameObject.Find ("BestDistance").GetComponent<TextMesh>().text = "Best Distance: " + bestDistance.ToString();
-		GameObject.Find ("ThisDistance").GetComponent<TextMesh>().text = "This Round: " + distance.ToString();
+		GameObject.Find ("BestDistance").GetComponent<TextMesh>().text = "Best Distance: " + Mathf.RoundToInt (bestDistance).ToString();
+		GameObject.Find ("ThisDistance").GetComponent<TextMesh>().text = "This Round: " + Mathf.RoundToInt (distance).ToString();
 		
 		IsRewinding = true;
 		GameObject.Find ("Rewinder").GetComponent<Rewinder>().StartRewind();
