@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class Obstacle : MonoBehaviour {
-
+	
 	// Use this for initialization
 	void Start () {
 	
@@ -32,6 +32,7 @@ public class Obstacle : MonoBehaviour {
 			if (GetComponent<controls>().Rewinding) return;
 			if (currState == BirdState.PlayerControlled) {
 				// Only end if the collider is player controlled
+				GetComponent<controls>().OnDeath();
 				GUIControls.GameOver();
 			}
 			else if (currState == BirdState.Replaying) {

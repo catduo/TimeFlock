@@ -146,6 +146,15 @@ public class GUIControls : MonoBehaviour {
 		newPlayer.transform.parent = GameObject.Find ("World").transform;
 	}
 	
+	public void RestartGame () {
+		ResetLevel ();
+		GameObject otherBirds = GameObject.Find ("OtherBirds");
+		for(int childBirds = 0; childBirds < otherBirds.transform.childCount; childBirds++){
+			Destroy(otherBirds.transform.GetChild(childBirds).gameObject);
+		}
+		Time.timeScale = 0;
+	}
+	
 	public void WaitForStart() {
 		// TODO
 		//menu.SendMessage("MenuOn");
