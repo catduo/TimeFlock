@@ -20,7 +20,7 @@ public class Parallax : MonoBehaviour {
 	}
 	
 	void Reset () {
-		while(){
+		while(false){
 			transform.Translate(new Vector3(movementSpeed * rewindSpeed, 0, 0));
 			rewindFrames++;
 		}
