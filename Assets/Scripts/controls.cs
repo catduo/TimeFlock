@@ -113,16 +113,16 @@ public class controls : MonoBehaviour {
 	
 	BirdInputState GetKeys () {
 		var bis = new BirdInputState();
-		if (Input.GetKey (KeyCode.W)){
+		if (Input.GetKey (KeyCode.W) || Input.GetKey (KeyCode.UpArrow)){
 			bis.VAxis += 1;
 		}
-		if (Input.GetKey (KeyCode.S)){
+		if (Input.GetKey (KeyCode.S) || Input.GetKey (KeyCode.DownArrow)){
 			bis.VAxis -= 1;
 		}
-		if (Input.GetKey (KeyCode.A)){
+		if (Input.GetKey (KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)){
 			bis.HAxis -= 1;
 		}
-		if (Input.GetKey (KeyCode.D)){
+		if (Input.GetKey (KeyCode.D) || Input.GetKey(KeyCode.RightArrow)){
 			bis.HAxis += 1;
 		}
 		return bis;
