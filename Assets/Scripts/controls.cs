@@ -16,6 +16,7 @@ public class controls : RewindableObject<bool> {
 	public static Vector3 StartingPositionPC = new Vector3(5.0f, 5.0f, -0.1f);
 	public static Vector3 StartingPositionReplay = new Vector3(5.0f, 5.0f, 0.0f);
 	public Material NonPlayerMaterial;
+	public Transform FlockCapacitorPrefab;
 	
 	public BirdState CurrState;
 	List<BirdInputState> inputs;
@@ -53,6 +54,12 @@ public class controls : RewindableObject<bool> {
 			t.gameObject.renderer.material = NonPlayerMaterial;
 		}
 		Destroy (collider);
+	}
+	
+	public void OnDeath() {
+		// Create explosion
+		Transform newFluxT = (Transform) GameObject.Instantiate(FlockCapacitorPrefab, transform.position, Quaternion.identity);
+		newFluxT.parent = GameObject.Find("Obstacles").transform;
 	}
 	
 	// Use this for initialization
@@ -114,6 +121,7 @@ public class controls : RewindableObject<bool> {
 		ApplyInputs(inputs[currFrame]);
 		currFrame += 1;
 		if (currFrame >= inputs.Count) {
+			OnDeath();
 			InitState(BirdState.Dead);
 		}
 	}
