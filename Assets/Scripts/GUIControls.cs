@@ -3,6 +3,19 @@ using System.Collections.Generic;
 
 public class GUIControls : MonoBehaviour {
 	
+	// Bounds of the screen where the birds can fly
+	public const int BoundsMinX = 2;
+	public const int BoundsMaxX = 15;
+	public const int BoundsMinY = 1;
+	public const int BoundsMaxY = 19;
+	
+	static public int NumBirdsUsed = 0;
+	static public float distance = 0.0f;
+	static private float bestDistance;
+	
+	static public bool IsRewinding = false;
+	
+	
 	private GameObject menu;
 	private GameObject mainCamera;
 	private GameObject obstacles;
@@ -10,12 +23,6 @@ public class GUIControls : MonoBehaviour {
 	private AudioSource audioSource;
 	
 	public Transform BirdPrefab;
-	
-	static public int NumBirdsUsed = 0;
-	static public float distance = 0.0f;
-	static private float bestDistance;
-	
-	static public bool IsRewinding = false;
 
 	// Use this for initialization
 	void Start () {

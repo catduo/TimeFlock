@@ -69,14 +69,6 @@ public class controls : MonoBehaviour {
 		Destroy (collider);
 	}
 	
-	// Bounds of the screen where the birds can fly
-	private int minX = 2;
-	private int maxX = 15;
-	private int minY = 1;
-	private int maxY = 19;
-	// Distance from the border to start feeling pushed away
-	private int tolerance = 3;
-	
 	// Use this for initialization
 	void Start () {
 		inputs = new List<BirdInputState>();
@@ -180,17 +172,17 @@ public class controls : MonoBehaviour {
 	}
 	
 	void keepInBounds(){
-		float newX = Mathf.Clamp(transform.position.x, minX, maxX);
-		float newY = Mathf.Clamp(transform.position.y, minY, maxY);
+		float newX = Mathf.Clamp(transform.position.x, GUIControls.BoundsMinX, GUIControls.BoundsMaxX);
+		float newY = Mathf.Clamp(transform.position.y, GUIControls.BoundsMinY, GUIControls.BoundsMaxY);
 
 		transform.position = new Vector3(newX, newY, 0);
 		
-		if ((newX == minX && rigidbody.velocity.x < 0)
-			||(newX == maxX && rigidbody.velocity.x > 0)){
+		if ((newX == GUIControls.BoundsMinX && rigidbody.velocity.x < 0)
+			||(newX == GUIControls.BoundsMaxX && rigidbody.velocity.x > 0)){
 			rigidbody.velocity = new Vector3(0, rigidbody.velocity.y, 0);
 		}		
-		if ((newY == minY && rigidbody.velocity.y < 0)
-			||(newY == maxY && rigidbody.velocity.y > 0)){
+		if ((newY == GUIControls.BoundsMinY && rigidbody.velocity.y < 0)
+			||(newY == GUIControls.BoundsMaxY && rigidbody.velocity.y > 0)){
 			rigidbody.velocity = new Vector3(rigidbody.velocity.x, 0, 0);
 		}
 	}
