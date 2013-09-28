@@ -28,6 +28,7 @@ public class controls : RewindableObject<bool> {
 		CurrState = s;
 		if (s == BirdState.Dead) {
 			SetDrawn(false);
+			OnDeath ();
 		}
 		else {
 			if (s == BirdState.PlayerControlled) {
@@ -58,6 +59,7 @@ public class controls : RewindableObject<bool> {
 	
 	public void OnDeath() {
 		// Create explosion
+		print ("OnDeath");
 		Transform newFluxT = (Transform) GameObject.Instantiate(FlockCapacitorPrefab, transform.position, Quaternion.identity);
 		newFluxT.parent = GameObject.Find("Obstacles").transform;
 	}
@@ -121,7 +123,6 @@ public class controls : RewindableObject<bool> {
 		ApplyInputs(inputs[currFrame]);
 		currFrame += 1;
 		if (currFrame >= inputs.Count) {
-			OnDeath();
 			InitState(BirdState.Dead);
 		}
 	}
