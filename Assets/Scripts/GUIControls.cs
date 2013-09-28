@@ -5,6 +5,7 @@ public class GUIControls : MonoBehaviour {
 	
 	private GameObject menu;
 	private GameObject mainCamera;
+	private GameObject obstacles;
 	private GameObject distanceText;
 	private AudioSource audioSource;
 	static public int distance;
@@ -27,6 +28,7 @@ public class GUIControls : MonoBehaviour {
 	void Update () {
 		GetTouch();
 		GetMouse();
+		UpdateDistance();
 		if(gameOver){
 			GameOver();
 		}
@@ -63,10 +65,6 @@ public class GUIControls : MonoBehaviour {
 	//update the distance text
 	void UpdateDistance () {
 		distanceText.GetComponent<TextMesh>().text = "Distance: " + distance.ToString();
-	}
-	
-	//when a combo happens display the combo count
-	void Combo () {
 	}
 	
 	//when the game ends put up a menu that lets you restart
