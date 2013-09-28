@@ -153,9 +153,7 @@ public class controls : MonoBehaviour {
 		}
 		
 		SetRender (rewind[currFrame].Alive);
-		if (rewind[currFrame].Alive) {
-			transform.position = new Vector3(rewind[currFrame].PosX, rewind[currFrame].PosY, 0.0f);
-		}
+		transform.position = new Vector3(rewind[currFrame].PosX, rewind[currFrame].PosY, 0.0f);
 		currFrame -= 1;
 	}
 	

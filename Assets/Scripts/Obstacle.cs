@@ -14,8 +14,9 @@ public class Obstacle : MonoBehaviour {
 	}
 	
 	void OnTriggerEnter(Collider other) {
+		var currState = GetComponent<controls>().CurrState;
 		if(other.name == "FlockZone(Clone)"){
-			if (GetComponent<controls>().CurrState == BirdState.PlayerControlled){
+			if (currState == BirdState.PlayerControlled){
 				float forceX = 200*(transform.position.x - other.transform.position.x);
 				float forceY = 200*(transform.position.y - other.transform.position.y);
 				print ("applying force x="+forceX+" y="+forceY);
@@ -24,11 +25,11 @@ public class Obstacle : MonoBehaviour {
 		}
 		else {
 			// TODO Make explosion?
-			if (GetComponent<controls>().CurrState == BirdState.PlayerControlled) {
+			if (currState == BirdState.PlayerControlled) {
 				// Only end if the collider is player controlled
 				GUIControls.GameOver();
 			}
-			else {
+			else if (currState == BirdState.Replaying) {
 				GetComponent<controls>().InitState(BirdState.Dead);
 			}
 		}
