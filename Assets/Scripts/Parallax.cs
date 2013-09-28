@@ -5,8 +5,6 @@ public class Parallax : MonoBehaviour {
 	
 	public float movementSpeed;
 	public float distanceTravelled;
-	private float rewindSpeed = 5;
-	private int rewindFrames = 0;
 	
 	private Vector3 initPosition;
 	
