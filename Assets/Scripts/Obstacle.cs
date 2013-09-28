@@ -19,7 +19,7 @@ public class Obstacle : MonoBehaviour {
 		}
 		else{
 			GUIControls.gameOver = true;
-			GameObject.Find ("CurrentBird").GetComponent<controls>().InitState(BirdState.Dead);
+			GameObject.Find ("CurrentBird").GetComponent<controls>().InitState(BirdState.Rewinding);
 		}
 	}
 }

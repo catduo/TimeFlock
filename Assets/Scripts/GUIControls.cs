@@ -10,6 +10,8 @@ public class GUIControls : MonoBehaviour {
 	private AudioSource audioSource;
 	static public int distance;
 	private int bestDistance;
+	
+	static public bool IsRewinding = false;
 	static public bool gameOver = false;
 
 	// Use this for initialization
@@ -96,12 +98,14 @@ public class GUIControls : MonoBehaviour {
 		PlayerPrefs.SetInt("bestDistance", bestDistance);
 		GameObject.Find ("BestDistance").GetComponent<TextMesh>().text = "Best Distance: " + bestDistance.ToString();
 		GameObject.Find ("ThisDistance").GetComponent<TextMesh>().text = "This Round: " + distance.ToString();
-		GameObject.Find ("Close").SendMessage("Reset");
+		/*GameObject.Find ("Close").SendMessage("Reset");
 		GameObject.Find ("Far").SendMessage("Reset");
 		GameObject.Find ("Mid").SendMessage("Reset");
-		GameObject.Find ("Obstacles").SendMessage("Reset");
+		GameObject.Find ("Obstacles").SendMessage("Reset");*/
+		IsRewinding = true;
+		GameObject.Find ("Rewinder").GetComponent<Rewinder>().StartRewind();
 		//menu.SendMessage("MenuOn");
-		Reset ();
+		//Reset ();
 	}
 	
 	void Reset () {
