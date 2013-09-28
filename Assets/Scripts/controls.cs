@@ -1,11 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public struct BirdRewindState {
-	public float PosX, PosY;
-	public bool Alive;
-}
-
 public struct BirdInputState {
 	public int HAxis, VAxis;
 }
@@ -13,13 +8,13 @@ public struct BirdInputState {
 public enum BirdState {
 	PlayerControlled,
 	Replaying,
-	Rewinding,
 	Dead
 };
 
-public class controls : MonoBehaviour {
+public class controls : RewindableObject<bool> {
 	
-	public static Vector3 StartingPosition = new Vector3(5.0f, 5.0f, 0.0f);
+	public static Vector3 StartingPositionPC = new Vector3(5.0f, 5.0f, -0.1f);
+	public static Vector3 StartingPositionReplay = new Vector3(5.0f, 5.0f, 0.0f);
 	public Material NonPlayerMaterial;
 	
 	public BirdState CurrState;
@@ -43,6 +38,10 @@ public class controls : MonoBehaviour {
 		else {
 			if (s == BirdState.PlayerControlled) {
 				inputs.Clear();
+				transform.position = StartingPositionPC;
+			}
+			else if (s == BirdState.Replaying) {
+				transform.position = StartingPositionReplay;
 			}
 			
 			if (s == BirdState.PlayerControlled || s == BirdState.Replaying) {
@@ -50,7 +49,6 @@ public class controls : MonoBehaviour {
 				
 				currFrame = 0;
 				rewind.Clear();
-				transform.position = StartingPosition;
 				rigidbody.velocity = Vector3.zero;
 			}
 			else if (s == BirdState.Rewinding) {
