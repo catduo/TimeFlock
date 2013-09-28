@@ -44,6 +44,10 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\DPadDown.cs" />
+     <Compile Include="Assets\Scripts\DPadLeft.cs" />
+     <Compile Include="Assets\Scripts\DPadRight.cs" />
+     <Compile Include="Assets\Scripts\DPadUp.cs" />
      <Compile Include="Assets\Scripts\GUIControls.cs" />
      <Compile Include="Assets\Scripts\Parallax.cs" />
   </ItemGroup>

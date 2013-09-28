@@ -1,8 +1,13 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GUIControls.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/DPadRight.cs">
     <Files>
-      <File FileName="Assets/Scripts/GUIControls.cs" Line="60" Column="3" />
+      <File FileName="Assets/Scripts/GUIControls.cs" Line="50" Column="43" />
+      <File FileName="Assets/Scripts/Parallax.cs" Line="11" Column="25" />
+      <File FileName="Assets/Scripts/DPadUp.cs" Line="18" Column="16" />
+      <File FileName="Assets/Scripts/DPadDown.cs" Line="19" Column="32" />
+      <File FileName="Assets/Scripts/DPadLeft.cs" Line="19" Column="32" />
+      <File FileName="Assets/Scripts/DPadRight.cs" Line="19" Column="33" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

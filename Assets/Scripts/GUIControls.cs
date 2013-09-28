@@ -44,6 +44,16 @@ public class GUIControls : MonoBehaviour {
 	                 objectTouched.transform.SendMessage("Tap", SendMessageOptions.DontRequireReceiver);
 	            }
 			}
+		}		
+		if(Input.touchCount > 0){
+			Touch touch = Input.GetTouch(0);
+			if(touch.phase == TouchPhase.Stationary || touch.phase == TouchPhase.Moved){
+	            Ray ray = Camera.main.ScreenPointToRay(touch.position);
+	            RaycastHit objectTouched ;
+	            if (Physics.Raycast (ray, out objectTouched)) {
+	                 objectTouched.transform.SendMessage("Hold", SendMessageOptions.DontRequireReceiver);
+	            }
+			}
 		}
 	}
 	
@@ -54,6 +64,14 @@ public class GUIControls : MonoBehaviour {
 	        RaycastHit objectTouchedSim ;
 	        if (Physics.Raycast (simRay, out objectTouchedSim)) {
 	             objectTouchedSim.transform.SendMessage("Tap", SendMessageOptions.DontRequireReceiver);
+	        }
+		}
+		if(Input.GetMouseButton(0)){
+			Vector3 simTouch = Input.mousePosition;
+	        Ray simRay = Camera.main.ScreenPointToRay(simTouch);
+	        RaycastHit objectTouchedSim ;
+	        if (Physics.Raycast (simRay, out objectTouchedSim)) {
+	             objectTouchedSim.transform.SendMessage("Hold", SendMessageOptions.DontRequireReceiver);
 	        }
 		}
 	}
