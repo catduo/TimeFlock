@@ -3,6 +3,19 @@ using System.Collections.Generic;
 
 public class GUIControls : MonoBehaviour {
 	
+	// Bounds of the screen where the birds can fly
+	public const int BoundsMinX = 2;
+	public const int BoundsMaxX = 15;
+	public const int BoundsMinY = 1;
+	public const int BoundsMaxY = 19;
+	
+	static public int NumBirdsUsed = 0;
+	static public float distance = 0.0f;
+	static private float bestDistance;
+	
+	static public bool IsRewinding = false;
+	
+	
 	private GameObject menu;
 	private GameObject mainCamera;
 	private GameObject obstacles;
@@ -10,12 +23,6 @@ public class GUIControls : MonoBehaviour {
 	private AudioSource audioSource;
 	
 	public Transform BirdPrefab;
-	
-	static public int NumBirdsUsed = 0;
-	static public float distance = 0.0f;
-	static private float bestDistance;
-	
-	static public bool IsRewinding = false;
 
 	// Use this for initialization
 	void Start () {
@@ -27,6 +34,8 @@ public class GUIControls : MonoBehaviour {
 		GameObject.Find ("BestDistance").GetComponent<TextMesh>().text = "Best Distance: " + bestDistance.ToString();
 		GameObject.Find ("ThisDistance").GetComponent<TextMesh>().text = "This Round: " + distance.ToString();
 		distanceText.GetComponent<TextMesh>().text = "Distance: " + distance.ToString();
+		
+		GameObject.Find ("CurrentBird").GetComponent<controls>().InitState(BirdState.PlayerControlled);
 	}
 	
 	// Update is called once per frame
@@ -126,11 +135,12 @@ public class GUIControls : MonoBehaviour {
 		}
 		var player = GameObject.Find ("CurrentBird");
 		player.name = "GhostBird" + NumBirdsUsed;
-		player.transform.parent = GameObject.Find ("OtherBirds").transform;
+		player.GetComponent<controls>().MakeNonPlayer();
 		NumBirdsUsed += 1;
 		
 		// Make a new player bird
 		var newPlayer = (Transform)(Instantiate(BirdPrefab, Vector3.zero, Quaternion.identity));
+		newPlayer.SendMessage("Start");
 		newPlayer.GetComponent<controls>().InitState(BirdState.PlayerControlled);
 		newPlayer.name = "CurrentBird";
 		newPlayer.transform.parent = GameObject.Find ("World").transform;

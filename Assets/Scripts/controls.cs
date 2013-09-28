@@ -20,29 +20,34 @@ public enum BirdState {
 public class controls : MonoBehaviour {
 	
 	public static Vector3 StartingPosition = new Vector3(5.0f, 5.0f, 0.0f);
+	public Material NonPlayerMaterial;
 	
-	public BirdState currState;
+	public BirdState CurrState;
 	List<BirdInputState> inputs;
 	List<BirdRewindState> rewind;
 	int currFrame;
 	
-	public float force = 20;
+	public float movementForce = 50.0f;
+	
+	void SetRender(bool r) {
+		foreach (Transform t in transform) {
+			t.gameObject.renderer.enabled = r;
+		}
+	}
 	
 	public void InitState(BirdState s) {
-		Debug.Log (currState);
-		currState = s;
+		CurrState = s;
 		if (s == BirdState.Dead) {
-			this.enabled = false;
-			this.gameObject.SetActive(false);
+			SetRender(false);
 		}
 		else {
 			if (s == BirdState.PlayerControlled) {
 				inputs.Clear();
-				this.enabled = true;
-				this.gameObject.SetActive(true);
 			}
 			
 			if (s == BirdState.PlayerControlled || s == BirdState.Replaying) {
+				SetRender(true);
+				
 				currFrame = 0;
 				rewind.Clear();
 				transform.position = StartingPosition;
@@ -56,13 +61,13 @@ public class controls : MonoBehaviour {
 		}
 	}
 	
-	// Bounds of the screen where the birds can fly
-	private int minX = 2;
-	private int maxX = 15;
-	private int minY = 1;
-	private int maxY = 19;
-	// Distance from the border to start feeling pushed away
-	private int tolerance = 3;
+	public void MakeNonPlayer() {
+		transform.parent = GameObject.Find ("OtherBirds").transform;
+		foreach (Transform t in transform) {
+			t.gameObject.renderer.material = NonPlayerMaterial;
+		}
+		Destroy (collider);
+	}
 	
 	// Use this for initialization
 	void Start () {
@@ -73,7 +78,7 @@ public class controls : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-		if (currState == BirdState.Dead) {
+		if (CurrState == BirdState.Dead) {
 			// Add a "dead" rewind state
 			var brs = new BirdRewindState();
 			brs.PosX = transform.position.x;
@@ -83,7 +88,7 @@ public class controls : MonoBehaviour {
 			return;
 		}
 		
-		switch (currState) {
+		switch (CurrState) {
 		case BirdState.PlayerControlled:
 			var bis = GetKeys();
 			inputs.Add (bis);
@@ -100,29 +105,31 @@ public class controls : MonoBehaviour {
 	
 	BirdInputState GetKeys () {
 		var bis = new BirdInputState();
-		if (Input.GetKey (KeyCode.W)){
+		if (Input.GetKey (KeyCode.W) || Input.GetKey (KeyCode.UpArrow)){
 			bis.VAxis += 1;
 		}
-		if (Input.GetKey (KeyCode.S)){
+		if (Input.GetKey (KeyCode.S) || Input.GetKey (KeyCode.DownArrow)){
 			bis.VAxis -= 1;
 		}
-		if (Input.GetKey (KeyCode.A)){
+		if (Input.GetKey (KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)){
 			bis.HAxis -= 1;
 		}
-		if (Input.GetKey (KeyCode.D)){
+		if (Input.GetKey (KeyCode.D) || Input.GetKey(KeyCode.RightArrow)){
 			bis.HAxis += 1;
 		}
 		return bis;
 	}
 	
 	public void ApplyInputs(BirdInputState bis) {
-		rigidbody.AddForce(bis.HAxis * force, bis.VAxis * force, 0.0f);
+		rigidbody.AddForce(bis.HAxis * movementForce, bis.VAxis * movementForce, 0.0f);
+		rigidbody.velocity = rigidbody.velocity / 1.05f;
+		keepInBounds();
+		
 		var brs = new BirdRewindState();
 		brs.PosX = transform.position.x;
 		brs.PosY = transform.position.y;
 		brs.Alive = true;
 		rewind.Add (brs);
-		keepInBounds();
 	}
 	
 	void DoReplay() {
@@ -134,19 +141,13 @@ public class controls : MonoBehaviour {
 	}
 	
 	void DoRewind() {
+		rigidbody.velocity = Vector3.zero;
 		if (currFrame < 0) {
 			return;
 		}
 		
-		if (rewind[currFrame].Alive) {
-			this.enabled = true;
-			this.gameObject.SetActive(true);
-			transform.position = new Vector3(rewind[currFrame].PosX, rewind[currFrame].PosY, 0.0f);
-		}
-		else {
-			this.enabled = false;
-			this.gameObject.SetActive(false);
-		}
+		SetRender (rewind[currFrame].Alive);
+		transform.position = new Vector3(rewind[currFrame].PosX, rewind[currFrame].PosY, 0.0f);
 		currFrame -= 1;
 	}
 	
@@ -171,17 +172,17 @@ public class controls : MonoBehaviour {
 	}
 	
 	void keepInBounds(){
-		float newX = Mathf.Clamp(transform.position.x, minX, maxX);
-		float newY = Mathf.Clamp(transform.position.y, minY, maxY);
+		float newX = Mathf.Clamp(transform.position.x, GUIControls.BoundsMinX, GUIControls.BoundsMaxX);
+		float newY = Mathf.Clamp(transform.position.y, GUIControls.BoundsMinY, GUIControls.BoundsMaxY);
 
 		transform.position = new Vector3(newX, newY, 0);
 		
-		if ((newX == minX && rigidbody.velocity.x < 0)
-			||(newX == maxX && rigidbody.velocity.x > 0)){
+		if ((newX == GUIControls.BoundsMinX && rigidbody.velocity.x < 0)
+			||(newX == GUIControls.BoundsMaxX && rigidbody.velocity.x > 0)){
 			rigidbody.velocity = new Vector3(0, rigidbody.velocity.y, 0);
 		}		
-		if ((newY == minY && rigidbody.velocity.y < 0)
-			||(newY == maxY && rigidbody.velocity.y > 0)){
+		if ((newY == GUIControls.BoundsMinY && rigidbody.velocity.y < 0)
+			||(newY == GUIControls.BoundsMaxY && rigidbody.velocity.y > 0)){
 			rigidbody.velocity = new Vector3(rigidbody.velocity.x, 0, 0);
 		}
 	}

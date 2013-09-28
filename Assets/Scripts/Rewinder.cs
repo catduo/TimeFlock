@@ -14,9 +14,9 @@ public class Rewinder : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (rewinding) {
-			Time.timeScale = (Time.realtimeSinceStartup - rewindStartTime) * 2.0f;
-			if (Time.timeScale > 4.0f) {
-				Time.timeScale = 4.0f;
+			Time.timeScale = (Time.realtimeSinceStartup - rewindStartTime) * 3.0f;
+			if (Time.timeScale > 6.0f) {
+				Time.timeScale = 6.0f;
 			}
 			
 			if (GUIControls.distance <= 0) {
