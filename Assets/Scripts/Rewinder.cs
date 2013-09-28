@@ -15,8 +15,8 @@ public class Rewinder : MonoBehaviour {
 	void Update () {
 		if (rewinding) {
 			Time.timeScale = (Time.realtimeSinceStartup - rewindStartTime) * 2.0f;
-			if (Time.timeScale > 3.0f) {
-				Time.timeScale = 3.0f;
+			if (Time.timeScale > 4.0f) {
+				Time.timeScale = 4.0f;
 			}
 			
 			if (GUIControls.distance <= 0) {
@@ -31,6 +31,6 @@ public class Rewinder : MonoBehaviour {
 	public void StartRewind() {
 		rewindStartTime = Time.realtimeSinceStartup;
 		rewinding = true;
-		Time.timeScale = 0.1f;
+		Time.timeScale = 0.0f;
 	}
 }

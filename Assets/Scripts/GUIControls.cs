@@ -8,8 +8,9 @@ public class GUIControls : MonoBehaviour {
 	private GameObject obstacles;
 	private GameObject distanceText;
 	private AudioSource audioSource;
-	static public int distance;
-	private int bestDistance;
+	
+	static public float distance;
+	static private float bestDistance;
 	
 	static public bool IsRewinding = false;
 
@@ -30,6 +31,15 @@ public class GUIControls : MonoBehaviour {
 		GetTouch();
 		GetMouse();
 		UpdateDistance();
+	}
+	
+	void FixedUpdate() {
+		if (!IsRewinding) {
+			distance += 0.1f;
+		}
+		else {
+			distance -= 0.1f;
+		}
 	}
 	
 	void GetTouch() {		//find everything that has a touch initiated on it and let it know
@@ -84,14 +94,14 @@ public class GUIControls : MonoBehaviour {
 	}
 	
 	//when the game ends put up a menu that lets you restart
-	void GameOver(){
+	static public void GameOver(){
 		if(bestDistance < 10){
 			bestDistance = distance;
 		}
 		else if(distance > bestDistance){
 			bestDistance = distance;
 		}
-		PlayerPrefs.SetInt("bestDistance", bestDistance);
+		PlayerPrefs.SetFloat("bestDistance", bestDistance);
 		GameObject.Find ("BestDistance").GetComponent<TextMesh>().text = "Best Distance: " + bestDistance.ToString();
 		GameObject.Find ("ThisDistance").GetComponent<TextMesh>().text = "This Round: " + distance.ToString();
 		
@@ -100,12 +110,14 @@ public class GUIControls : MonoBehaviour {
 	}
 	
 	public void ResetLevel () {
-		gameOver = false;
-		
+		Time.timeScale = 1.0f;
+		IsRewinding = false;
 		GameObject.Find ("Close").SendMessage("Reset");
 		GameObject.Find ("Far").SendMessage("Reset");
 		GameObject.Find ("Mid").SendMessage("Reset");
 		GameObject.Find ("Obstacles").SendMessage("Reset");
+		
+		// TODO: reset all birds
 	}
 	
 	public void WaitForStart() {
