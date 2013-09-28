@@ -16,6 +16,6 @@ public class DPadRight : MonoBehaviour {
 	}
 	
 	void Hold () {
-		bird.SendMessage("controlRight");
+		DPad.HAxis = 1;
 	}
 }
