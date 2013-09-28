@@ -16,9 +16,9 @@ public class Rewinder : MonoBehaviour {
 		if (rewinding) {
 			var timeSinceRewind = (Time.realtimeSinceStartup - rewindStartTime);
 			var easeScale = timeSinceRewind;
-			Time.timeScale = easeScale * 10.0f;
-			if (Time.timeScale > 40.0f) {
-				Time.timeScale = 40.0f;
+			Time.timeScale = easeScale * 8.0f;
+			if (Time.timeScale > 20.0f) {
+				Time.timeScale = 20.0f;
 			}
 			
 			if (GUIControls.distance <= 0) {
@@ -38,6 +38,11 @@ public class Rewinder : MonoBehaviour {
 		// Rewind all birds
 		foreach (var bird in GUIControls.FindAllBirds()) {
 			bird.GetComponent<controls>().StartRewind();
+		}
+		
+		// Rewind all parallaxes
+		foreach (var parallax in GameObject.FindObjectsOfType(typeof(Parallax))) {
+			((Parallax)parallax).StartRewind();
 		}
 	}
 }

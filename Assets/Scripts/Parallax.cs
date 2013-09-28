@@ -1,38 +1,27 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Parallax : MonoBehaviour {
+public class Parallax : RewindableObject<bool> {
 	
 	public float movementSpeed;
-	public float distanceTravelled;
 	
 	private Vector3 initPosition;
 	
 	// Use this for initialization
-	void Start () {
-		distanceTravelled = 0;
+	override protected void Start () {
+		base.Start();
 		initPosition = transform.position;
 	}
 	
 	// Update is called once per frame
-	void FixedUpdate () {
+	override protected void ForwardFixedUpdate () {
 		float movement = movementSpeed * (1.0f + (GUIControls.distance / 500.0f));
-		
-		if (!GUIControls.IsRewinding) {
-			transform.Translate(new Vector3(-movement, 0, 0));
-			distanceTravelled += movementSpeed;
-		}
-		else {
-			transform.Translate(new Vector3(movement, 0, 0));
-		}
+		transform.Translate(new Vector3(-movement, 0, 0));
+		AddRewindState(false);
 	}
 	
 	void Reset () {
-		/*while((rewindFrames + 2) * rewindSpeed * movementSpeed < distanceTravelled){
-			transform.Translate(new Vector3(movementSpeed * rewindSpeed, 0, 0));
-			rewindFrames++;
-		}
-		transform.Translate(new Vector3(distanceTravelled - (rewindFrames + 2) * rewindSpeed * movementSpeed, 0, 0));*/
+		ResetRewind();
 		transform.position = initPosition;
 	}
 }
