@@ -3,9 +3,14 @@ using System.Collections;
 
 public class Menu : MonoBehaviour {
 	
+	private TextMesh thisDistance;
+	private TextMesh numLives;
+	
 	// Use this for initialization
 	void Start () {
 		MenuOff ();
+		thisDistance = GameObject.Find ("ThisDistance").GetComponent<TextMesh>();
+		numLives = GameObject.Find ("NumLives").GetComponent<TextMesh>();
 	}
 	
 	// Update is called once per frame
@@ -15,7 +20,8 @@ public class Menu : MonoBehaviour {
 	
 	void MenuOn() {
 		Time.timeScale = 0;
-		GameObject.Find ("ThisDistance").GetComponent<TextMesh>().text = "This Round: " + GUIControls.distance.ToString();
+		numLives.text = "Flock Size: " + (GUIControls.NumBirdsUsed + 1).ToString();
+		thisDistance.text = "This Round: " + Mathf.RoundToInt(GUIControls.distance).ToString();
 		if(transform.position.y != 10){
 			transform.position = new Vector3(13, 10, -9);
 		}
