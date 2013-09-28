@@ -116,6 +116,7 @@ public class controls : MonoBehaviour {
 		brs.PosX = transform.position.x;
 		brs.PosY = transform.position.y;
 		rewind.Add (brs);
+		keepInBounds();
 	}
 	
 	void DoReplay() {
