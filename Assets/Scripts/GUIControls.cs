@@ -27,6 +27,8 @@ public class GUIControls : MonoBehaviour {
 		GameObject.Find ("BestDistance").GetComponent<TextMesh>().text = "Best Distance: " + bestDistance.ToString();
 		GameObject.Find ("ThisDistance").GetComponent<TextMesh>().text = "This Round: " + distance.ToString();
 		distanceText.GetComponent<TextMesh>().text = "Distance: " + distance.ToString();
+		
+		GameObject.Find ("CurrentBird").GetComponent<controls>().InitState(BirdState.PlayerControlled);
 	}
 	
 	// Update is called once per frame
@@ -126,11 +128,12 @@ public class GUIControls : MonoBehaviour {
 		}
 		var player = GameObject.Find ("CurrentBird");
 		player.name = "GhostBird" + NumBirdsUsed;
-		player.transform.parent = GameObject.Find ("OtherBirds").transform;
+		player.GetComponent<controls>().MakeNonPlayer();
 		NumBirdsUsed += 1;
 		
 		// Make a new player bird
 		var newPlayer = (Transform)(Instantiate(BirdPrefab, Vector3.zero, Quaternion.identity));
+		newPlayer.SendMessage("Start");
 		newPlayer.GetComponent<controls>().InitState(BirdState.PlayerControlled);
 		newPlayer.name = "CurrentBird";
 		newPlayer.transform.parent = GameObject.Find ("World").transform;

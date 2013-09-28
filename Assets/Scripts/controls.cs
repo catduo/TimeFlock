@@ -20,29 +20,34 @@ public enum BirdState {
 public class controls : MonoBehaviour {
 	
 	public static Vector3 StartingPosition = new Vector3(5.0f, 5.0f, 0.0f);
+	public Material NonPlayerMaterial;
 	
-	public BirdState currState;
+	public BirdState CurrState;
 	List<BirdInputState> inputs;
 	List<BirdRewindState> rewind;
 	int currFrame;
 	
 	public float force = 20;
 	
+	void SetRender(bool r) {
+		foreach (Transform t in transform) {
+			t.gameObject.renderer.enabled = r;
+		}
+	}
+	
 	public void InitState(BirdState s) {
-		Debug.Log (currState);
-		currState = s;
+		CurrState = s;
 		if (s == BirdState.Dead) {
-			this.enabled = false;
-			this.gameObject.SetActive(false);
+			SetRender(false);
 		}
 		else {
 			if (s == BirdState.PlayerControlled) {
 				inputs.Clear();
-				this.enabled = true;
-				this.gameObject.SetActive(true);
 			}
 			
 			if (s == BirdState.PlayerControlled || s == BirdState.Replaying) {
+				SetRender(true);
+				
 				currFrame = 0;
 				rewind.Clear();
 				transform.position = StartingPosition;
@@ -54,6 +59,14 @@ public class controls : MonoBehaviour {
 				transform.position = new Vector3(rs.PosX, rs.PosY, 0.0f);
 			}
 		}
+	}
+	
+	public void MakeNonPlayer() {
+		transform.parent = GameObject.Find ("OtherBirds").transform;
+		foreach (Transform t in transform) {
+			t.gameObject.renderer.material = NonPlayerMaterial;
+		}
+		Destroy (collider);
 	}
 	
 	// Bounds of the screen where the birds can fly
@@ -73,7 +86,7 @@ public class controls : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-		if (currState == BirdState.Dead) {
+		if (CurrState == BirdState.Dead) {
 			// Add a "dead" rewind state
 			var brs = new BirdRewindState();
 			brs.PosX = transform.position.x;
@@ -83,7 +96,7 @@ public class controls : MonoBehaviour {
 			return;
 		}
 		
-		switch (currState) {
+		switch (CurrState) {
 		case BirdState.PlayerControlled:
 			var bis = GetKeys();
 			inputs.Add (bis);
@@ -134,18 +147,14 @@ public class controls : MonoBehaviour {
 	}
 	
 	void DoRewind() {
+		rigidbody.velocity = Vector3.zero;
 		if (currFrame < 0) {
 			return;
 		}
 		
+		SetRender (rewind[currFrame].Alive);
 		if (rewind[currFrame].Alive) {
-			this.enabled = true;
-			this.gameObject.SetActive(true);
 			transform.position = new Vector3(rewind[currFrame].PosX, rewind[currFrame].PosY, 0.0f);
-		}
-		else {
-			this.enabled = false;
-			this.gameObject.SetActive(false);
 		}
 		currFrame -= 1;
 	}

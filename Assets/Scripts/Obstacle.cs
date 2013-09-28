@@ -18,7 +18,13 @@ public class Obstacle : MonoBehaviour {
 			
 		}
 		else {
-			GUIControls.GameOver();
+			if (GetComponent<controls>().CurrState == BirdState.PlayerControlled) {
+				// Only end if the collider is player controlled
+				GUIControls.GameOver();
+			}
+			else {
+				GetComponent<controls>().InitState(BirdState.Dead);
+			}
 		}
 	}
 }
