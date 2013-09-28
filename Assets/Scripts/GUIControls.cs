@@ -56,6 +56,10 @@ public class GUIControls : MonoBehaviour {
 		}
 	}
 	
+	void GetKeys () {
+		
+	}
+	
 	//update the distance text
 	void UpdateDistance () {
 		distanceText.GetComponent<TextMesh>().text = "Distance: " + distance.ToString();
