@@ -21,6 +21,7 @@ public class controls : MonoBehaviour {
 	
 	public static Vector3 StartingPosition = new Vector3(5.0f, 5.0f, 0.0f);
 	public Material NonPlayerMaterial;
+	public Transform FlockCapacitorPrefab;
 	
 	public BirdState CurrState;
 	List<BirdInputState> inputs;
@@ -67,6 +68,12 @@ public class controls : MonoBehaviour {
 			t.gameObject.renderer.material = NonPlayerMaterial;
 		}
 		Destroy (collider);
+	}
+	
+	public void OnDeath() {
+		// Create explosion
+		Transform newFluxT = (Transform) GameObject.Instantiate(FlockCapacitorPrefab, transform.position, Quaternion.identity);
+		newFluxT.parent = GameObject.Find("Obstacles").transform;
 	}
 	
 	// Use this for initialization
@@ -136,6 +143,7 @@ public class controls : MonoBehaviour {
 		ApplyInputs(inputs[currFrame]);
 		currFrame += 1;
 		if (currFrame >= inputs.Count) {
+			OnDeath();
 			InitState(BirdState.Dead);
 		}
 	}
