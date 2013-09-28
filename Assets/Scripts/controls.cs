@@ -122,6 +122,7 @@ public class controls : MonoBehaviour {
 		brs.PosY = transform.position.y;
 		brs.Alive = true;
 		rewind.Add (brs);
+		keepInBounds();
 	}
 	
 	void DoReplay() {
