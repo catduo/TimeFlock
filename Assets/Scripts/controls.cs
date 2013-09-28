@@ -19,7 +19,7 @@ public enum BirdState {
 
 public class controls : MonoBehaviour {
 	
-	public static Vector3 StartingPosition;
+	public static Vector3 StartingPosition = new Vector3(5.0f, 5.0f, 0.0f);
 	
 	BirdState currState;
 	List<BirdInputState> inputs;
