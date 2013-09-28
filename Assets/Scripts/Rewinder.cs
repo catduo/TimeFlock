@@ -32,5 +32,10 @@ public class Rewinder : MonoBehaviour {
 		rewindStartTime = Time.realtimeSinceStartup;
 		rewinding = true;
 		Time.timeScale = 0.0f;
+		
+		// Rewind all birds
+		foreach (var bird in GUIControls.FindAllBirds()) {
+			bird.GetComponent<controls>().InitState(BirdState.Rewinding);
+		}
 	}
 }
