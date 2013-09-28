@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DPadUp : MonoBehaviour {
-	
-	public Transform bird;
-	
+public class Rewinder : MonoBehaviour {
+
 	// Use this for initialization
 	void Start () {
 	
@@ -13,9 +11,5 @@ public class DPadUp : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
-	}
-	
-	void Hold () {
-		DPad.VAxis = 1;
 	}
 }
