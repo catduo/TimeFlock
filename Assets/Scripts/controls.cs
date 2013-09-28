@@ -58,9 +58,9 @@ public class controls : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		currState = BirdState.Dead;
 		inputs = new List<BirdInputState>();
 		rewind = new List<BirdRewindState>();
+		InitState(BirdState.PlayerControlled);
 	}
 	
 	// Update is called once per frame
