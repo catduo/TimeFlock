@@ -148,7 +148,7 @@ public class controls : RewindableObject<bool> {
 		float newX = Mathf.Clamp(transform.position.x, GUIControls.BoundsMinX, GUIControls.BoundsMaxX);
 		float newY = Mathf.Clamp(transform.position.y, GUIControls.BoundsMinY, GUIControls.BoundsMaxY);
 
-		transform.position = new Vector3(newX, newY, 0);
+		transform.position = new Vector3(newX, newY, transform.position.z);
 		
 		if ((newX == GUIControls.BoundsMinX && rigidbody.velocity.x < 0)
 			||(newX == GUIControls.BoundsMaxX && rigidbody.velocity.x > 0)){
