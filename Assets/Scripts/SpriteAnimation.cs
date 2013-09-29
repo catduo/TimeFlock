@@ -51,6 +51,7 @@ public class SpriteAnimation : MonoBehaviour {
 					animationFrame = 0;
 				}
 			}
+			animationTime = Time.time;
 		}
 	}
 }
