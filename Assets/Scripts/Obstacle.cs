@@ -13,7 +13,7 @@ public class Obstacle : MonoBehaviour {
 	
 	}
 	
-	void OnTriggerEnter(Collider other) {
+	IEnumerator OnTriggerEnter(Collider other) {
 		var currState = GetComponent<controls>().CurrState;
 		if(other.name == "FlockCapacitor(Clone)"){
 			if (currState == BirdState.PlayerControlled){
@@ -43,19 +43,20 @@ public class Obstacle : MonoBehaviour {
 			}
 		}
 		else {
-			if (GetComponent<controls>().Rewinding) return;
+			if (GetComponent<controls>().Rewinding) return false;
 			
 			if (currState == BirdState.PlayerControlled) {
 				// Player controlled bird hit an obstacle
-				Time.timeScale = 0;
+				GUIControls.IsPaused = true;
 				GetComponent<controls>().OnDeath();
 				//GUIControls.GameOver();
-				InvokeRepeating("AfterBlackHole", 2.0f, 0.0f);
+				yield return new WaitForSeconds(3.0f);
+				GUIControls.IsPaused = false;
+				GUIControls.GameOver();
 			}
 		}
 	}
 	
 	void AfterBlackHole() {
-		GUIControls.GameOver();
 	}
 }

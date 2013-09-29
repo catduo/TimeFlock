@@ -17,6 +17,7 @@ public class GUIControls : MonoBehaviour {
 	
 	static public bool IsRewinding = false;
 	static public bool IsSlowing = false;
+	static public bool IsPaused = false;
 	
 	
 	private GameObject menu;
@@ -67,11 +68,13 @@ public class GUIControls : MonoBehaviour {
 	}
 	
 	void FixedUpdate() {
-		if (!IsRewinding) {
-			distance += 0.1f;
-		}
-		else {
-			distance -= 0.1f;
+		if (!IsPaused) {
+			if (!IsRewinding) {
+				distance += 0.1f;
+			}
+			else {
+				distance -= 0.1f;
+			}
 		}
 	}
 	
