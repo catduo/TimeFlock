@@ -58,7 +58,7 @@ public class GUIControls : MonoBehaviour {
 				Time.timeScale = 0.5f;
 				PlayerEnergy -= Time.deltaTime;
 			}
-			else {
+			else if (Time.timeScale != 0) {
 				Time.timeScale = 1.0f;
 			}
 		}

@@ -47,9 +47,15 @@ public class Obstacle : MonoBehaviour {
 			
 			if (currState == BirdState.PlayerControlled) {
 				// Player controlled bird hit an obstacle
+				Time.timeScale = 0;
 				GetComponent<controls>().OnDeath();
-				GUIControls.GameOver();
+				//GUIControls.GameOver();
+				InvokeRepeating("AfterBlackHole", 2.0f, 0.0f);
 			}
 		}
+	}
+	
+	void AfterBlackHole() {
+		GUIControls.GameOver();
 	}
 }
