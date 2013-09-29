@@ -46,7 +46,7 @@ public class LaserFan : RewindableObject<float> {
 			shotCountdown -= 1;
 			if (shotCountdown <= 0) {
 				shotCountdown = ShotRate;
-				// TODO: fire a shot
+				GetComponent<AudioSource>().Play();
 				var shot = (Transform)Instantiate(LaserShotPrefab, transform.position + new Vector3(0.0f, 0.0f, -0.1f),
 					LaserShotPrefab.transform.rotation);
 				shot.transform.parent = transform;

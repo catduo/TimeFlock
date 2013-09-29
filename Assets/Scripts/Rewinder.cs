@@ -16,9 +16,9 @@ public class Rewinder : MonoBehaviour {
 		if (rewinding) {
 			var timeSinceRewind = (Time.realtimeSinceStartup - rewindStartTime);
 			var easeScale = timeSinceRewind;
-			Time.timeScale = easeScale * 8.0f;
-			if (Time.timeScale > 20.0f) {
-				Time.timeScale = 20.0f;
+			Time.timeScale = easeScale * 7.0f;
+			if (Time.timeScale > 15.0f) {
+				Time.timeScale = 15.0f;
 			}
 			
 			if (GUIControls.distance <= 0) {
