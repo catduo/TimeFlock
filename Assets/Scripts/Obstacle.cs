@@ -34,9 +34,9 @@ public class Obstacle : MonoBehaviour {
 				GetComponent<controls>().OnDeath();
 				GUIControls.GameOver();
 			}
-			else if (currState == BirdState.Replaying) {
+			/*else if (currState == BirdState.Replaying) {
 				GetComponent<controls>().InitState(BirdState.Dead);
-			}
+			}*/
 		}
 	}
 }

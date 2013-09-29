@@ -1,9 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+public struct BirdPlaybackState {
+	public Vector3 Position;
+	public bool DeathByCollision;
+}
+
 public struct BirdInputState {
 	public int HAxis, VAxis;
-	public bool DeathByCollision;
+	public bool SlowDownPressed;
 }
 
 public enum BirdState {
@@ -20,7 +25,7 @@ public class controls : RewindableObject<bool> {
 	public Transform FlockCapacitorPrefab;
 	
 	public BirdState CurrState;
-	List<BirdInputState> inputs;
+	List<BirdPlaybackState> replay;
 	int currFrame;
 	
 	public float movementForce = 50.0f;
@@ -33,7 +38,7 @@ public class controls : RewindableObject<bool> {
 		}
 		else {
 			if (s == BirdState.PlayerControlled) {
-				inputs.Clear();
+				replay.Clear();
 				transform.position = StartingPositionPC;
 			}
 			else if (s == BirdState.Replaying) {
@@ -64,16 +69,17 @@ public class controls : RewindableObject<bool> {
 		newFluxT.parent = GameObject.Find("Obstacles").transform;
 		
 		if (CurrState == BirdState.PlayerControlled) {
-			var bis = new BirdInputState();
-			bis.DeathByCollision = true;
-			inputs.Add(bis);
+			var bps = new BirdPlaybackState();
+			bps.Position = transform.position;
+			bps.DeathByCollision = true;
+			replay.Add(bps);
 		}
 	}
 	
 	// Use this for initialization
 	override protected void Start () {
 		base.Start ();
-		inputs = new List<BirdInputState>();
+		replay = new List<BirdPlaybackState>();
 		InitState(BirdState.PlayerControlled);
 	}
 	
@@ -90,9 +96,9 @@ public class controls : RewindableObject<bool> {
 		
 		switch (CurrState) {
 		case BirdState.PlayerControlled:
-			var bis = GetKeys();
-			inputs.Add (bis);
+			var bis = GetInputs();
 			ApplyInputs(bis);
+			AddReplay();
 			break;
 		case BirdState.Replaying:
 			DoReplay();
@@ -100,7 +106,7 @@ public class controls : RewindableObject<bool> {
 		}
 	}
 	
-	BirdInputState GetKeys () {
+	BirdInputState GetInputs() {
 		var bis = new BirdInputState();
 		if (Input.GetKey (KeyCode.W) || Input.GetKey (KeyCode.UpArrow)){
 			bis.VAxis += 1;
@@ -114,25 +120,45 @@ public class controls : RewindableObject<bool> {
 		if (Input.GetKey (KeyCode.D) || Input.GetKey(KeyCode.RightArrow)){
 			bis.HAxis += 1;
 		}
+		
+		if (Input.GetKey(KeyCode.Space)) {
+			bis.SlowDownPressed = true;
+		}
+		
 		return bis;
 	}
 	
-	public void ApplyInputs(BirdInputState bis) {
+	public void ApplyInputs (BirdInputState bis) {
 		rigidbody.AddForce(bis.HAxis * movementForce, bis.VAxis * movementForce, 0.0f);
 		rigidbody.velocity = rigidbody.velocity / 1.05f;
 		keepInBounds();
+		if (bis.SlowDownPressed) {
+			Time.timeScale = 0.5f;
+		}
+		else {
+			Time.timeScale = 1.0f;
+		}
 		
 		AddRewindState(false);
 	}
 	
+	public void AddReplay() {
+		var bps = new BirdPlaybackState();
+		bps.Position = transform.position;
+		bps.DeathByCollision = false;
+		replay.Add(bps);
+	}
+	
 	void DoReplay() {
-		ApplyInputs(inputs[currFrame]);
-		if (inputs[currFrame].DeathByCollision) {
+		rigidbody.velocity = Vector3.zero;
+		transform.position = replay[currFrame].Position;
+		AddRewindState(false);
+		if (replay[currFrame].DeathByCollision) {
 			InitState(BirdState.Dead);
 			return;
 		}
 		currFrame += 1;
-		if (currFrame >= inputs.Count) {
+		if (currFrame >= replay.Count) {
 			CurrState = BirdState.Dead;
 			SetDrawn(false);
 		}
