@@ -14,7 +14,19 @@ public struct ObjectRewindState<T> where T : struct {
 	public T Custom;
 }
 
-public class RewindableObject<T> : MonoBehaviour where T: struct {
+public abstract class Rewindable : MonoBehaviour {
+	abstract public void StartRewind();
+	abstract public void ResetRewind();
+	abstract public void DoneRewinding();
+	
+	virtual protected void Start() {
+	}
+	
+	virtual protected void FixedUpdate() {
+	}
+}
+
+public class RewindableObject<T> : Rewindable where T: struct {
 	
 	public bool Rewinding;
 	int currRewindFrame;
@@ -46,25 +58,29 @@ public class RewindableObject<T> : MonoBehaviour where T: struct {
 		}
 	}
 	
-	public void StartRewind() {
+	public override void StartRewind() {
 		Rewinding = true;
+		if (states == null) return;
 		currRewindFrame = states.Count-1;
 		if (rigidbody != null) rigidbody.velocity = Vector3.zero;
 	}
 	
-	public void ResetRewind() {
+	public override void ResetRewind() {
 		states.Clear();
 		currRewindFrame = 0;
 		Rewinding = false;
+		ResetToBeginning();
 	}
 
-	virtual protected void Start () {
+	override protected void Start () {
+		base.Start();
 		states = new List<ObjectRewindState<T>>();
 		SetDrawn(true);
 		ResetRewind();
 	}
 	
-	virtual protected void FixedUpdate() {
+	override protected void FixedUpdate() {
+		base.FixedUpdate();
 		if (Rewinding) {
 			var ors = states[currRewindFrame];
 			transform.position = ors.Pos;
@@ -91,7 +107,11 @@ public class RewindableObject<T> : MonoBehaviour where T: struct {
 	virtual protected void ForwardFixedUpdate() {
 	}
 	
-	virtual protected void DoneRewinding() {
+	override public void DoneRewinding() {
+		ResetToBeginning();
+	}
+	
+	virtual protected void ResetToBeginning() {
 	}
 	
 	protected void AddRewindState(T custom) {

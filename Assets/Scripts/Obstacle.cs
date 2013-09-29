@@ -40,14 +40,12 @@ public class Obstacle : MonoBehaviour {
 		}
 		else {
 			if (GetComponent<controls>().Rewinding) return;
+			
 			if (currState == BirdState.PlayerControlled) {
 				// Player controlled bird hit an obstacle
 				GetComponent<controls>().OnDeath();
 				GUIControls.GameOver();
 			}
-			/*else if (currState == BirdState.Replaying) {
-				GetComponent<controls>().InitState(BirdState.Dead);
-			}*/
 		}
 	}
 }

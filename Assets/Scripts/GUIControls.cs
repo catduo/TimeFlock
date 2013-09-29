@@ -153,10 +153,17 @@ public class GUIControls : MonoBehaviour {
 		Time.timeScale = 1.0f;
 		IsRewinding = false;
 		distance = 0;
-		GameObject.Find ("Close").SendMessage("Reset");
+		
+		// Reset stuff
+		/*GameObject.Find ("Close").SendMessage("Reset");
 		GameObject.Find ("Far").SendMessage("Reset");
 		GameObject.Find ("Mid").SendMessage("Reset");
-		GameObject.Find ("Obstacles").SendMessage("Reset");
+		GameObject.Find ("Obstacles").SendMessage("Reset");*/
+		
+		foreach (var o in GameObject.FindObjectsOfType(typeof(Rewindable))) {
+			((Rewindable)o).DoneRewinding();
+			((Rewindable)o).ResetRewind();
+		}
 		
 		// Reset all birds
 		foreach (var bird in FindAllBirds()) {

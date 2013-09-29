@@ -170,12 +170,6 @@ public class controls : RewindableObject<bool> {
 		}
 	}
 	
-	override protected void ApplyCustom(bool custom) {
-	}
-	
-	override protected void DoneRewinding() {
-	}
-	
 	void keepInBounds(){
 		float newX = Mathf.Clamp(transform.position.x, GUIControls.BoundsMinX, GUIControls.BoundsMaxX);
 		float newY = Mathf.Clamp(transform.position.y, GUIControls.BoundsMinY, GUIControls.BoundsMaxY);

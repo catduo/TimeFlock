@@ -9,8 +9,8 @@ public class Parallax : RewindableObject<bool> {
 	
 	// Use this for initialization
 	override protected void Start () {
-		base.Start();
 		initPosition = transform.position;
+		base.Start();
 	}
 	
 	// Update is called once per frame
@@ -20,8 +20,7 @@ public class Parallax : RewindableObject<bool> {
 		AddRewindState(false);
 	}
 	
-	void Reset () {
-		ResetRewind();
+	override protected void ResetToBeginning () {
 		transform.position = initPosition;
 	}
 }

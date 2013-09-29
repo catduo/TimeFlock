@@ -35,14 +35,9 @@ public class Rewinder : MonoBehaviour {
 		rewinding = true;
 		Time.timeScale = 0.0f;
 		
-		// Rewind all birds
-		foreach (var bird in GUIControls.FindAllBirds()) {
-			bird.GetComponent<controls>().StartRewind();
-		}
-		
-		// Rewind all parallaxes
-		foreach (var parallax in GameObject.FindObjectsOfType(typeof(Parallax))) {
-			((Parallax)parallax).StartRewind();
+		// Rewind all objects
+		foreach (var rwo in GameObject.FindObjectsOfType(typeof(Rewindable))) {
+			((Rewindable)rwo).StartRewind();
 		}
 	}
 }
