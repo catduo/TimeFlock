@@ -10,14 +10,17 @@ public class DPadDown : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		DPad.HAxis = 0;
+		DPad.VAxis = 0;
 	}
 	
 	void Hold () {
 		DPad.VAxis = -1;
+		DPad.HAxis = 0;
 	}
 	
 	void Release () {
+		DPad.HAxis = 0;
 		DPad.VAxis = 0;
 	}
 }

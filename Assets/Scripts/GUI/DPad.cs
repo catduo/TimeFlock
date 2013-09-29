@@ -21,4 +21,12 @@ public class DPad : MonoBehaviour {
 			bird.GetComponent<controls>().ApplyInputs(bis);
 		}
 	}
+	
+	public void clearControls() {
+		print ("clear controls");
+		bis.VAxis = 0;
+		bis.HAxis = 0;
+		bis.SlowDownPressed = false;
+		bird.GetComponent<controls>().ApplyInputs(bis);
+	}
 }
