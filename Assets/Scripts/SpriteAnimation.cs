@@ -3,7 +3,7 @@ using System.Collections;
 
 public class SpriteAnimation : MonoBehaviour {
 	
-	private float animationSpeed = 0.2F;
+	private float animationSpeed = 0.1F;
 	private float animationTime;
 	private int animationPosition = 0;
 	private int animationFrame = 0;
@@ -51,6 +51,7 @@ public class SpriteAnimation : MonoBehaviour {
 					animationFrame = 0;
 				}
 			}
+			animationTime = Time.time;
 		}
 	}
 }
