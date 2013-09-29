@@ -4,12 +4,11 @@ using System.Collections;
 public class Capacitor : MonoBehaviour {
 	
 	public float state = 0f;
-	private float maxState = 100f;
 	public bool stateBackwards = false;
 	
 	// Use this for initialization
 	void Start () {
-		state = 0f;
+		transform.localScale = new Vector3(0, 0, 0);
 	}
 	
 	// Update is called once per frame
@@ -22,10 +21,4 @@ public class Capacitor : MonoBehaviour {
 		if (state == 100) stateBackwards = true;
 		if (state == 0) gameObject.renderer.enabled = false;
 	}
-	
-	/*void SetRender(bool r) {
-		foreach (Transform t in transform) {
-			t.gameObject.renderer.enabled = r;
-		}
-	}*/
 }
