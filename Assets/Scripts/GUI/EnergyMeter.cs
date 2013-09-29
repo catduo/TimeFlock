@@ -3,19 +3,14 @@ using System.Collections;
 
 public class EnergyMeter : MonoBehaviour {
 	
-	private float width;
-	private float xpos;
-	
 	// Use this for initialization
 	void Start () {
-		xpos = 0;
-		width = 0.9F;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		width = 0.9F * (100 - GUIControls.distance);
-		xpos = width - 0.9F;
+		transform.localScale = new Vector3(0.9F * GUIControls.PlayerEnergy/GUIControls.StartingPlayerEnergy, 1, 0.9F);
+		transform.localPosition = new Vector3((0.9F - transform.localScale.x) * 5, 0, 0);
 	}
 	
 	void Hold(){

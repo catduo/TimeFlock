@@ -5,7 +5,7 @@ public class GUIControls : MonoBehaviour {
 	
 	// Bounds of the screen where the birds can fly
 	public const int BoundsMinX = 2;
-	public const int BoundsMaxX = 20;
+	public const int BoundsMaxX = 24;
 	public const int BoundsMinY = 1;
 	public const int BoundsMaxY = 19;
 	
