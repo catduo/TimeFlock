@@ -22,6 +22,7 @@ public class controls : RewindableObject<bool> {
 	public static Vector3 StartingPositionPC = new Vector3(5.0f, 5.0f, -0.1f);
 	public static Vector3 StartingPositionReplay = new Vector3(5.0f, 5.0f, 0.0f);
 	public Material NonPlayerMaterial;
+	public Transform BlackHolePrefab;
 	public Transform FlockCapacitorPrefab;
 	public Transform TrailRendererPrefab;
 	
@@ -74,7 +75,12 @@ public class controls : RewindableObject<bool> {
 		Transform newFluxT = (Transform) GameObject.Instantiate(FlockCapacitorPrefab, transform.position, Quaternion.identity);
 		newFluxT.parent = GameObject.Find("Obstacles").transform;
 		
+		GetComponent<AudioSource>().Play ();
+		
 		if (CurrState == BirdState.PlayerControlled) {
+			Transform blackhole = (Transform) GameObject.Instantiate(BlackHolePrefab, transform.position, Quaternion.identity);
+			blackhole.parent = GameObject.Find("Obstacles").transform;
+			
 			var bps = new BirdPlaybackState();
 			bps.Position = transform.position;
 			bps.DeathByCollision = true;
