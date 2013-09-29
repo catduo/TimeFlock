@@ -56,7 +56,7 @@ public class GUIControls : MonoBehaviour {
 		
 		if (!IsRewinding) {
 			if (IsSlowing && PlayerEnergy > 0) {
-				Time.timeScale = 0.5f;
+				Time.timeScale = 0.35f;
 				PlayerEnergy -= Time.deltaTime;
 			}
 			else if (Time.timeScale != 0) {

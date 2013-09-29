@@ -47,6 +47,7 @@ public class Obstacle : MonoBehaviour {
 			
 			if (currState == BirdState.PlayerControlled) {
 				// Player controlled bird hit an obstacle
+				GUIControls.IsSlowing = false;
 				GUIControls.IsPaused = true;
 				GetComponent<controls>().OnDeath();
 				//GUIControls.GameOver();
