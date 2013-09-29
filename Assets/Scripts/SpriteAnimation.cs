@@ -3,7 +3,8 @@ using System.Collections;
 
 public class SpriteAnimation : MonoBehaviour {
 	
-	private int animationSpeed = 1;
+	private float animationSpeed = 0.2F;
+	private float animationTime;
 	private int animationPosition = 0;
 	private int animationFrame = 0;
 	private float xOffset = 0.25F;
@@ -13,6 +14,7 @@ public class SpriteAnimation : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		animationTime = Time.time;
 	}
 	
 	// Update is called once per frame
@@ -20,32 +22,34 @@ public class SpriteAnimation : MonoBehaviour {
 		if(transform.parent.GetComponent<controls>().CurrState == BirdState.Replaying){
 			isOld = true;
 		}
-		if(isOld){
-			if(animationFrame<8){
-				renderer.material.mainTextureOffset = new Vector2(xOffset * (animationFrame - 6) + 0.5F, yOffset * 2);
+		if(Time.time > animationTime + animationSpeed){
+			if(isOld){
+				if(animationFrame<8){
+					renderer.material.mainTextureOffset = new Vector2(xOffset * (animationFrame - 6) + 0.5F, yOffset * 2);
+				}
+				else{
+					renderer.material.mainTextureOffset = new Vector2(xOffset * (animationFrame - 8), yOffset);
+				}
+				if(animationFrame < 11){
+					animationFrame++;
+				}
+				else{
+					animationFrame = 6;
+				}
 			}
 			else{
-				renderer.material.mainTextureOffset = new Vector2(xOffset * (animationFrame - 8), yOffset);
-			}
-			if(animationFrame < 11){
-				animationFrame++;
-			}
-			else{
-				animationFrame = 6;
-			}
-		}
-		else{
-			if(animationFrame<4){
-				renderer.material.mainTextureOffset = new Vector2(xOffset * animationFrame, yOffset * 3);
-			}
-			else{
-				renderer.material.mainTextureOffset = new Vector2(xOffset * (animationFrame - 4), yOffset * 2);
-			}
-			if(animationFrame < 5){
-				animationFrame++;
-			}
-			else{
-				animationFrame = 0;
+				if(animationFrame<4){
+					renderer.material.mainTextureOffset = new Vector2(xOffset * animationFrame, yOffset * 3);
+				}
+				else{
+					renderer.material.mainTextureOffset = new Vector2(xOffset * (animationFrame - 4), yOffset * 2);
+				}
+				if(animationFrame < 5){
+					animationFrame++;
+				}
+				else{
+					animationFrame = 0;
+				}
 			}
 		}
 	}
