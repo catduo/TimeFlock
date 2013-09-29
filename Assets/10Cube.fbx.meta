@@ -1,14 +1,21 @@
 fileFormatVersion: 2
-guid: 06095d99e9952462797aab5f706f9cf0
+guid: 94423b0eb282e4ab4805b44029a364c7
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
     100000: //RootNode
+    100002: 10Cube
+    100004: Camera
+    100006: Lamp
     400000: //RootNode
+    400002: 10Cube
+    400004: Camera
+    400006: Lamp
     2300000: //RootNode
+    2300002: 10Cube
     3300000: //RootNode
-    4300000: Cube
-    4300002: 10Cube
+    3300002: 10Cube
+    4300000: 10Cube
     7400000: Default Take
     9500000: //RootNode
   materials:
@@ -45,7 +52,7 @@ ModelImporter:
     splitTangentsAcrossUV: 1
     normalImportMode: 1
     tangentImportMode: 1
-  importAnimation: 0
+  importAnimation: 1
   copyAvatar: 0
   humanDescription:
     human: []
