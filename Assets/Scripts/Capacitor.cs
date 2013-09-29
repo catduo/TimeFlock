@@ -18,7 +18,7 @@ public class Capacitor : MonoBehaviour {
 		state = Mathf.Clamp(state, 0, 100);
 			
 		//Debug, we might do whatever animation instead of scale
-		transform.localScale = new Vector3(3*state/100, 3*state/100, 3*state/100);
+		transform.localScale = new Vector3(5*state/100, 5*state/100, 5*state/100);
 		if (state == 100) stateBackwards = true;
 		if (state == 0) gameObject.renderer.enabled = false;
 	}
