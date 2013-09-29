@@ -33,7 +33,7 @@ public class Rewinder : MonoBehaviour {
 	public void StartRewind() {
 		rewindStartTime = Time.realtimeSinceStartup;
 		rewinding = true;
-		Time.timeScale = 0.0f;
+		Time.timeScale = 0.1f;
 		
 		// Rewind all objects
 		foreach (var rwo in GameObject.FindObjectsOfType(typeof(Rewindable))) {

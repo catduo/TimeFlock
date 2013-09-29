@@ -22,8 +22,13 @@ public class controls : RewindableObject<bool> {
 	public static Vector3 StartingPositionPC = new Vector3(5.0f, 5.0f, -0.1f);
 	public static Vector3 StartingPositionReplay = new Vector3(5.0f, 5.0f, 0.0f);
 	public Material NonPlayerMaterial;
+	public Transform BlackHolePrefab;
 	public Transform FlockCapacitorPrefab;
 	public Transform TrailRendererPrefab;
+	public AudioClip BlackHoleClip;
+	public AudioClip FireExplosionClip;
+	
+	AudioSource blackHoleSource, fireExplosionSource;
 	
 	public BirdState CurrState;
 	List<BirdPlaybackState> replay;
@@ -70,11 +75,27 @@ public class controls : RewindableObject<bool> {
 	}
 	
 	public void OnDeath() {
+		foreach (Transform t in transform) {
+			t.gameObject.renderer.material = NonPlayerMaterial;
+		}
+		
 		// Create explosion
 		Transform newFluxT = (Transform) GameObject.Instantiate(FlockCapacitorPrefab, transform.position, Quaternion.identity);
 		newFluxT.parent = GameObject.Find("Obstacles").transform;
 		
+		var asource = GetComponent<AudioSource>();
 		if (CurrState == BirdState.PlayerControlled) {
+			asource.clip = BlackHoleClip;
+		}
+		else {
+			asource.clip = FireExplosionClip;
+		}
+		asource.Play();
+		
+		if (CurrState == BirdState.PlayerControlled) {
+			Transform blackhole = (Transform) GameObject.Instantiate(BlackHolePrefab, transform.position, Quaternion.identity);
+			blackhole.parent = GameObject.Find("Obstacles").transform;
+			
 			var bps = new BirdPlaybackState();
 			bps.Position = transform.position;
 			bps.DeathByCollision = true;
@@ -82,11 +103,23 @@ public class controls : RewindableObject<bool> {
 		}
 	}
 	
+	AudioSource AddAudio(AudioClip c) {
+		var newAudio = (AudioSource)gameObject.AddComponent(typeof(AudioSource));
+		newAudio.clip = c;
+		newAudio.loop = false;
+		newAudio.playOnAwake = false;
+		newAudio.volume = 1.0f;
+		return newAudio;
+	}
+	
 	// Use this for initialization
 	override protected void Start () {
 		base.Start ();
 		replay = new List<BirdPlaybackState>();
 		InitState(BirdState.PlayerControlled);
+		
+		//blackHoleSource = AddAudio(BlackHoleClip);
+		//fireExplosionSource = AddAudio(FireExplosionClip);
 	}
 	
 	override protected void FixedUpdate() {
@@ -98,6 +131,10 @@ public class controls : RewindableObject<bool> {
 		if (CurrState == BirdState.Dead) {
 			AddRewindState(false);
 			return;
+		}
+		
+		if (GUIControls.IsPaused) {
+			rigidbody.velocity = Vector3.zero;
 		}
 		
 		switch (CurrState) {
@@ -138,28 +175,29 @@ public class controls : RewindableObject<bool> {
 	}
 	
 	public void ApplyInputs (BirdInputState bis) {
-		var mf = movementForce;
-		var isSlowing = GUIControls.IsSlowing && GUIControls.PlayerEnergy > 0;
-		if (isSlowing) {
-			mf = 4.0f * movementForce;
+		if (!GUIControls.IsPaused) {
+			var mf = movementForce;
+			var isSlowing = GUIControls.IsSlowing && GUIControls.PlayerEnergy > 0;
+			if (isSlowing) {
+				mf = 4.0f * movementForce;
+			}
+			
+			rigidbody.AddForce(bis.HAxis * mf, bis.VAxis * mf, 0.0f);
+			if (isSlowing) {
+				rigidbody.velocity = rigidbody.velocity / 1.11f;
+			}
+			else {
+				rigidbody.velocity = rigidbody.velocity / 1.07f;
+			}
+			keepInBounds();
+			if (bis.SlowDownPressed) {
+				GUIControls.IsSlowing = true;
+			}
+			else {
+				GUIControls.IsSlowing = false;
+			}
+			AddRewindState(false);
 		}
-		
-		rigidbody.AddForce(bis.HAxis * mf, bis.VAxis * mf, 0.0f);
-		if (isSlowing) {
-			rigidbody.velocity = rigidbody.velocity / 1.11f;
-		}
-		else {
-			rigidbody.velocity = rigidbody.velocity / 1.07f;
-		}
-		keepInBounds();
-		if (bis.SlowDownPressed) {
-			GUIControls.IsSlowing = true;
-		}
-		else {
-			GUIControls.IsSlowing = false;
-		}
-		
-		AddRewindState(false);
 	}
 	
 	public void AddReplay() {
@@ -170,17 +208,19 @@ public class controls : RewindableObject<bool> {
 	}
 	
 	void DoReplay() {
-		rigidbody.velocity = Vector3.zero;
-		transform.position = replay[currFrame].Position + new Vector3(0.0f, 0.0f, 0.1f);
-		AddRewindState(false);
-		if (replay[currFrame].DeathByCollision) {
-			InitState(BirdState.Dead);
-			return;
-		}
-		currFrame += 1;
-		if (currFrame >= replay.Count) {
-			CurrState = BirdState.Dead;
-			SetDrawn(false);
+		if (!GUIControls.IsPaused) {
+			rigidbody.velocity = Vector3.zero;
+			transform.position = replay[currFrame].Position + new Vector3(0.0f, 0.0f, 0.1f);
+			AddRewindState(false);
+			if (replay[currFrame].DeathByCollision) {
+				InitState(BirdState.Dead);
+				return;
+			}
+			currFrame += 1;
+			if (currFrame >= replay.Count) {
+				CurrState = BirdState.Dead;
+				SetDrawn(false);
+			}
 		}
 	}
 	
