@@ -3,8 +3,6 @@ using System.Collections;
 
 public class DPadDown : MonoBehaviour {
 	
-	public Transform bird;
-
 	// Use this for initialization
 	void Start () {
 	
@@ -17,5 +15,9 @@ public class DPadDown : MonoBehaviour {
 	
 	void Hold () {
 		DPad.VAxis = -1;
+	}
+	
+	void Release () {
+		DPad.VAxis = 0;
 	}
 }

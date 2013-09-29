@@ -54,6 +54,9 @@ public class controls : RewindableObject<bool> {
 				rigidbody.velocity = Vector3.zero;
 			}
 		}
+		if (s == BirdState.PlayerControlled) {
+			GUIControls.initBirdControls(gameObject);
+		}
 	}
 	
 	public void MakeNonPlayer() {
@@ -154,7 +157,7 @@ public class controls : RewindableObject<bool> {
 	
 	void DoReplay() {
 		rigidbody.velocity = Vector3.zero;
-		transform.position = replay[currFrame].Position;
+		transform.position = replay[currFrame].Position + new Vector3(0.0f, 0.0f, 0.1f);
 		AddRewindState(false);
 		if (replay[currFrame].DeathByCollision) {
 			InitState(BirdState.Dead);
@@ -173,31 +176,12 @@ public class controls : RewindableObject<bool> {
 	override protected void DoneRewinding() {
 	}
 	
-	// Supposed to slow down when approaching the borders; not quite working yet
-	void fixVelocity(){
-		/*if (transform.position.x >= maxX - tolerance && rigidbody.velocity.x > 0){
-			print ("Fixing x velocity because x big =" + transform.position.x);
-			rigidbody.velocity = new Vector3(rigidbody.velocity.x/2,rigidbody.velocity.y,0);
-		}
-		else if (transform.position.x <= minX + tolerance && rigidbody.velocity.x < 0){
-			print ("Fixing x velocity because x small =" + transform.position.x);
-			rigidbody.velocity = new Vector3(rigidbody.velocity.x/2,rigidbody.velocity.y,0);
-		}
-		else if (transform.position.y >= maxY - tolerance && rigidbody.velocity.y > 0){
-			print ("Fixing y velocity because y big =" + transform.position.y);
-			rigidbody.velocity = new Vector3(rigidbody.velocity.x,rigidbody.velocity.y/2,0);
-		}
-		else if (transform.position.y <= minY + tolerance && rigidbody.velocity.y < 0){
-			print ("Fixing y velocity because y small =" + transform.position.y);
-			rigidbody.velocity = new Vector3(rigidbody.velocity.x,rigidbody.velocity.y/2,0);
-		}*/
-	}
-	
 	void keepInBounds(){
 		float newX = Mathf.Clamp(transform.position.x, GUIControls.BoundsMinX, GUIControls.BoundsMaxX);
 		float newY = Mathf.Clamp(transform.position.y, GUIControls.BoundsMinY, GUIControls.BoundsMaxY);
-
-		transform.position = new Vector3(newX, newY, transform.position.z);
+		
+		var newZ = (CurrState == BirdState.PlayerControlled) ? -0.1f : 0.0f;
+		transform.position = new Vector3(newX, newY, newZ);
 		
 		if ((newX == GUIControls.BoundsMinX && rigidbody.velocity.x < 0)
 			||(newX == GUIControls.BoundsMaxX && rigidbody.velocity.x > 0)){
