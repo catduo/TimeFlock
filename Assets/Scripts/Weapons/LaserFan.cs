@@ -5,7 +5,7 @@ public class LaserFan : RewindableObject<float> {
 	
 	public Transform LaserShotPrefab;
 	
-	const int ShotRate = 12;
+	const int ShotRate = 15;
 	
 	bool startRotating = false;
 	int shotCountdown = 0;
@@ -42,7 +42,7 @@ public class LaserFan : RewindableObject<float> {
 				return;
 			}
 			
-			rotation += 1.3f;
+			rotation += 1.2f;
 			shotCountdown -= 1;
 			if (shotCountdown <= 0) {
 				shotCountdown = ShotRate;

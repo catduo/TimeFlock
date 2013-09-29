@@ -29,7 +29,7 @@ public class controls : RewindableObject<bool> {
 	List<BirdPlaybackState> replay;
 	int currFrame;
 	
-	public float movementForce = 50.0f;
+	public float movementForce;
 	
 	public void InitState(BirdState s) {
 		CurrState = s;
@@ -138,8 +138,19 @@ public class controls : RewindableObject<bool> {
 	}
 	
 	public void ApplyInputs (BirdInputState bis) {
-		rigidbody.AddForce(bis.HAxis * movementForce, bis.VAxis * movementForce, 0.0f);
-		rigidbody.velocity = rigidbody.velocity / 1.05f;
+		var mf = movementForce;
+		var isSlowing = GUIControls.IsSlowing && GUIControls.PlayerEnergy > 0;
+		if (isSlowing) {
+			mf = 4.0f * movementForce;
+		}
+		
+		rigidbody.AddForce(bis.HAxis * mf, bis.VAxis * mf, 0.0f);
+		if (isSlowing) {
+			rigidbody.velocity = rigidbody.velocity / 1.11f;
+		}
+		else {
+			rigidbody.velocity = rigidbody.velocity / 1.07f;
+		}
 		keepInBounds();
 		if (bis.SlowDownPressed) {
 			GUIControls.IsSlowing = true;
