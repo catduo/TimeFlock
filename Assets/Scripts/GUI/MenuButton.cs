@@ -16,6 +16,6 @@ public class MenuButton : MonoBehaviour {
 	}
 	
 	void Tap () {
-		menu.SendMessage("MenuOn");
+		menu.SendMessage("ToggleMenu");
 	}
 }

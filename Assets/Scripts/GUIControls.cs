@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class GUIControls : MonoBehaviour {
 	
 	// Bounds of the screen where the birds can fly
-	public const int BoundsMinX = 2;
+	public const int BoundsMinX = -1;
 	public const int BoundsMaxX = 24;
 	public const int BoundsMinY = 1;
 	public const int BoundsMaxY = 19;
@@ -28,6 +28,7 @@ public class GUIControls : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		Application.targetFrameRate = 60;
 		bestDistance = PlayerPrefs.GetInt("bestDistance");
 		mainCamera = GameObject.Find("MainCamera");
 		menu = GameObject.Find("Menu");
@@ -44,6 +45,10 @@ public class GUIControls : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (Input.GetKeyDown(KeyCode.Escape)) {
+			GameObject.Find ("Menu").SendMessage("ToggleMenu");
+		}
+		
 		GetTouch();
 		GetMouse();
 		
@@ -128,6 +133,7 @@ public class GUIControls : MonoBehaviour {
 	
 	static public void initBirdControls(GameObject bird){
 		GameObject.Find("DPad").GetComponent<DPad>().bird = bird;
+		GameObject.Find("SlowPad").GetComponent<SlowPad>().bird = bird;
 	}
 	
 	//when the game ends put up a menu that lets you restart
