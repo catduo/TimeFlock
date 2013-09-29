@@ -9,6 +9,7 @@ public struct CustomRewindState {
 
 public struct ObjectRewindState<T> where T : struct {
 	public Vector3 Pos;
+	public bool SetPos;
 	public bool Drawn;
 	
 	public T Custom;
@@ -28,6 +29,7 @@ public abstract class Rewindable : MonoBehaviour {
 
 public class RewindableObject<T> : Rewindable where T: struct {
 	
+	Vector3 initPosition;
 	public bool Rewinding;
 	int currRewindFrame;
 	List<ObjectRewindState<T>> states;
@@ -74,6 +76,7 @@ public class RewindableObject<T> : Rewindable where T: struct {
 
 	override protected void Start () {
 		base.Start();
+		initPosition = transform.position;
 		states = new List<ObjectRewindState<T>>();
 		SetDrawn(true);
 		ResetRewind();
@@ -83,7 +86,9 @@ public class RewindableObject<T> : Rewindable where T: struct {
 		base.FixedUpdate();
 		if (Rewinding) {
 			var ors = states[currRewindFrame];
-			transform.position = ors.Pos;
+			if (ors.SetPos) {
+				transform.position = ors.Pos;
+			}
 			if (rigidbody != null) rigidbody.velocity = Vector3.zero;
 			SetDrawn(ors.Drawn);
 			ApplyCustom(ors.Custom);
@@ -112,11 +117,15 @@ public class RewindableObject<T> : Rewindable where T: struct {
 	}
 	
 	virtual protected void ResetToBeginning() {
+		transform.position = initPosition;
 	}
 	
-	protected void AddRewindState(T custom) {
+	protected void AddRewindState(T custom, bool setpos = true) {
 		var ors = new ObjectRewindState<T>();
-		ors.Pos = transform.position;
+		ors.SetPos = setpos;
+		if (setpos) {
+			ors.Pos = transform.position;
+		}
 		ors.Drawn = IsDrawn();
 		ors.Custom = custom;
 		states.Add (ors);

@@ -12,10 +12,11 @@ public class GUIControls : MonoBehaviour {
 	static public int NumBirdsUsed = 0;
 	static public float distance = 0.0f;
 	static private float bestDistance;
-	public const float StartingPlayerEnergy = 50.0f;
+	public const float StartingPlayerEnergy = 5.0f;
 	static public float PlayerEnergy = StartingPlayerEnergy;
 	
 	static public bool IsRewinding = false;
+	static public bool IsSlowing = false;
 	
 	
 	private GameObject menu;
@@ -53,14 +54,16 @@ public class GUIControls : MonoBehaviour {
 		GetMouse();
 		
 		if (!IsRewinding) {
-			PlayerEnergy -= Time.deltaTime;
+			if (IsSlowing && PlayerEnergy > 0) {
+				Time.timeScale = 0.5f;
+				PlayerEnergy -= Time.deltaTime;
+			}
+			else {
+				Time.timeScale = 1.0f;
+			}
 		}
 		
 		UpdateDistance();
-		
-		if (PlayerEnergy <= 0.0f) {
-			GameOver ();
-		}
 	}
 	
 	void FixedUpdate() {

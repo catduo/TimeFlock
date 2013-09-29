@@ -112,6 +112,9 @@ public class controls : RewindableObject<bool> {
 		}
 	}
 	
+	override protected void ResetToBeginning() {
+	}
+	
 	BirdInputState GetInputs() {
 		var bis = new BirdInputState();
 		if (Input.GetKey (KeyCode.W) || Input.GetKey (KeyCode.UpArrow)){
@@ -139,10 +142,10 @@ public class controls : RewindableObject<bool> {
 		rigidbody.velocity = rigidbody.velocity / 1.05f;
 		keepInBounds();
 		if (bis.SlowDownPressed) {
-			Time.timeScale = 0.5f;
+			GUIControls.IsSlowing = true;
 		}
 		else {
-			Time.timeScale = 1.0f;
+			GUIControls.IsSlowing = false;
 		}
 		
 		AddRewindState(false);
