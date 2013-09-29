@@ -19,6 +19,9 @@ public class Door : RewindableObject<float> {
 			}
 			AddRewindState(transform.position.y, false);
 		}
+		else {
+			rigidbody.velocity = Vector3.zero;
+		}
 	}
 	
 	override protected void ApplyCustom(float y) {
