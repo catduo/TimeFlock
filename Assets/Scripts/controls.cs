@@ -23,6 +23,7 @@ public class controls : RewindableObject<bool> {
 	public static Vector3 StartingPositionReplay = new Vector3(5.0f, 5.0f, 0.0f);
 	public Material NonPlayerMaterial;
 	public Transform FlockCapacitorPrefab;
+	public Transform TrailRendererPrefab;
 	
 	public BirdState CurrState;
 	List<BirdPlaybackState> replay;
@@ -61,6 +62,8 @@ public class controls : RewindableObject<bool> {
 			t.gameObject.renderer.material = NonPlayerMaterial;
 		}
 		Destroy (collider);
+		var trailRenderer = (Transform)Instantiate(TrailRendererPrefab);
+		trailRenderer.parent = this.transform;
 	}
 	
 	public void OnDeath() {
