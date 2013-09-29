@@ -15,7 +15,7 @@ public class Obstacle : MonoBehaviour {
 	
 	void OnTriggerEnter(Collider other) {
 		var currState = GetComponent<controls>().CurrState;
-		if(other.name == "FlockZone(Clone)"){
+		if(other.name == "FlockCapacitor(Clone)"){
 			if (currState == BirdState.PlayerControlled){
 				float obstacleState = other.GetComponent<Capacitor>().state;
 				float forceX = transform.position.x - other.transform.position.x;
@@ -23,7 +23,7 @@ public class Obstacle : MonoBehaviour {
 				Vector3 forceVector = new Vector3(forceX, forceY, 0);
 				
 				if (!other.GetComponent<Capacitor>().stateBackwards){
-					gameObject.rigidbody.AddForce((100f+4.5f*(100f-obstacleState))*forceVector.normalized);
+					gameObject.rigidbody.AddForce(200f*forceVector.normalized);
 				}
 			}
 		}
