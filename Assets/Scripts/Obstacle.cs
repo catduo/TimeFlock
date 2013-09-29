@@ -28,10 +28,9 @@ public class Obstacle : MonoBehaviour {
 			}
 		}
 		else {
-			// TODO Make explosion?
 			if (GetComponent<controls>().Rewinding) return;
 			if (currState == BirdState.PlayerControlled) {
-				// Only end if the collider is player controlled
+				// Player controlled bird hit an obstacle
 				GetComponent<controls>().OnDeath();
 				GUIControls.GameOver();
 			}

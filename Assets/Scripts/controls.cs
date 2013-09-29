@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public struct BirdInputState {
 	public int HAxis, VAxis;
+	public bool DeathByCollision;
 }
 
 public enum BirdState {
@@ -59,9 +60,14 @@ public class controls : RewindableObject<bool> {
 	
 	public void OnDeath() {
 		// Create explosion
-		print ("OnDeath");
 		Transform newFluxT = (Transform) GameObject.Instantiate(FlockCapacitorPrefab, transform.position, Quaternion.identity);
 		newFluxT.parent = GameObject.Find("Obstacles").transform;
+		
+		if (CurrState == BirdState.PlayerControlled) {
+			var bis = new BirdInputState();
+			bis.DeathByCollision = true;
+			inputs.Add(bis);
+		}
 	}
 	
 	// Use this for initialization
@@ -121,9 +127,14 @@ public class controls : RewindableObject<bool> {
 	
 	void DoReplay() {
 		ApplyInputs(inputs[currFrame]);
+		if (inputs[currFrame].DeathByCollision) {
+			InitState(BirdState.Dead);
+			return;
+		}
 		currFrame += 1;
 		if (currFrame >= inputs.Count) {
-			InitState(BirdState.Dead);
+			CurrState = BirdState.Dead;
+			SetDrawn(false);
 		}
 	}
 	
