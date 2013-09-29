@@ -75,10 +75,6 @@ public class controls : RewindableObject<bool> {
 	}
 	
 	public void OnDeath() {
-		foreach (Transform t in transform) {
-			t.gameObject.renderer.material = NonPlayerMaterial;
-		}
-		
 		// Create explosion
 		Transform newFluxT = (Transform) GameObject.Instantiate(FlockCapacitorPrefab, transform.position, Quaternion.identity);
 		newFluxT.parent = GameObject.Find("Obstacles").transform;
@@ -89,10 +85,16 @@ public class controls : RewindableObject<bool> {
 		}
 		else {
 			asource.clip = FireExplosionClip;
+			asource.volume = 0.6f;
 		}
 		asource.Play();
 		
 		if (CurrState == BirdState.PlayerControlled) {
+			
+			foreach (Transform t in transform) {
+				t.gameObject.renderer.material = NonPlayerMaterial;
+			}
+			
 			Transform blackhole = (Transform) GameObject.Instantiate(BlackHolePrefab, transform.position, Quaternion.identity);
 			blackhole.parent = GameObject.Find("Obstacles").transform;
 			
