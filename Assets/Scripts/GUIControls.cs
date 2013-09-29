@@ -128,6 +128,7 @@ public class GUIControls : MonoBehaviour {
 	
 	static public void initBirdControls(GameObject bird){
 		GameObject.Find("DPad").GetComponent<DPad>().bird = bird;
+		GameObject.Find("SlowPad").GetComponent<SlowPad>().bird = bird;
 	}
 	
 	//when the game ends put up a menu that lets you restart
