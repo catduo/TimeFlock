@@ -157,7 +157,7 @@ public class controls : RewindableObject<bool> {
 	
 	void DoReplay() {
 		rigidbody.velocity = Vector3.zero;
-		transform.position = replay[currFrame].Position;
+		transform.position = replay[currFrame].Position + new Vector3(0.0f, 0.0f, 0.1f);
 		AddRewindState(false);
 		if (replay[currFrame].DeathByCollision) {
 			InitState(BirdState.Dead);
@@ -179,8 +179,9 @@ public class controls : RewindableObject<bool> {
 	void keepInBounds(){
 		float newX = Mathf.Clamp(transform.position.x, GUIControls.BoundsMinX, GUIControls.BoundsMaxX);
 		float newY = Mathf.Clamp(transform.position.y, GUIControls.BoundsMinY, GUIControls.BoundsMaxY);
-
-		transform.position = new Vector3(newX, newY, transform.position.z);
+		
+		var newZ = (CurrState == BirdState.PlayerControlled) ? -0.1f : 0.0f;
+		transform.position = new Vector3(newX, newY, newZ);
 		
 		if ((newX == GUIControls.BoundsMinX && rigidbody.velocity.x < 0)
 			||(newX == GUIControls.BoundsMaxX && rigidbody.velocity.x > 0)){
