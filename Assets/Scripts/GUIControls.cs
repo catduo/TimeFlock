@@ -107,6 +107,14 @@ public class GUIControls : MonoBehaviour {
 	             objectTouchedSim.transform.SendMessage("Hold", SendMessageOptions.DontRequireReceiver);
 	        }
 		}
+		if(Input.GetMouseButtonUp(0)){
+			Vector3 simTouch = Input.mousePosition;
+	        Ray simRay = Camera.main.ScreenPointToRay(simTouch);
+	        RaycastHit objectTouchedSim ;
+	        if (Physics.Raycast (simRay, out objectTouchedSim)) {
+	             objectTouchedSim.transform.SendMessage("Release", SendMessageOptions.DontRequireReceiver);
+	        }
+		}
 	}
 	
 	void GetKeys () {
@@ -116,6 +124,10 @@ public class GUIControls : MonoBehaviour {
 	//update the distance text
 	void UpdateDistance () {
 		distanceText.GetComponent<TextMesh>().text = "Distance: " + Mathf.RoundToInt (distance).ToString();
+	}
+	
+	static public void initBirdControls(GameObject bird){
+		GameObject.Find("DPad").GetComponent<DPad>().bird = bird;
 	}
 	
 	//when the game ends put up a menu that lets you restart

@@ -54,6 +54,9 @@ public class controls : RewindableObject<bool> {
 				rigidbody.velocity = Vector3.zero;
 			}
 		}
+		if (s == BirdState.PlayerControlled) {
+			GUIControls.initBirdControls(gameObject);
+		}
 	}
 	
 	public void MakeNonPlayer() {
@@ -171,26 +174,6 @@ public class controls : RewindableObject<bool> {
 	}
 	
 	override protected void DoneRewinding() {
-	}
-	
-	// Supposed to slow down when approaching the borders; not quite working yet
-	void fixVelocity(){
-		/*if (transform.position.x >= maxX - tolerance && rigidbody.velocity.x > 0){
-			print ("Fixing x velocity because x big =" + transform.position.x);
-			rigidbody.velocity = new Vector3(rigidbody.velocity.x/2,rigidbody.velocity.y,0);
-		}
-		else if (transform.position.x <= minX + tolerance && rigidbody.velocity.x < 0){
-			print ("Fixing x velocity because x small =" + transform.position.x);
-			rigidbody.velocity = new Vector3(rigidbody.velocity.x/2,rigidbody.velocity.y,0);
-		}
-		else if (transform.position.y >= maxY - tolerance && rigidbody.velocity.y > 0){
-			print ("Fixing y velocity because y big =" + transform.position.y);
-			rigidbody.velocity = new Vector3(rigidbody.velocity.x,rigidbody.velocity.y/2,0);
-		}
-		else if (transform.position.y <= minY + tolerance && rigidbody.velocity.y < 0){
-			print ("Fixing y velocity because y small =" + transform.position.y);
-			rigidbody.velocity = new Vector3(rigidbody.velocity.x,rigidbody.velocity.y/2,0);
-		}*/
 	}
 	
 	void keepInBounds(){

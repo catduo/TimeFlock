@@ -5,7 +5,7 @@ public class DPad : MonoBehaviour {
 	
 	static public int HAxis = 0;
 	static public int VAxis = 0;
-	private GameObject bird;
+	public GameObject bird;
 	BirdInputState bis;
 	
 	// Use this for initialization
