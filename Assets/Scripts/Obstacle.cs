@@ -23,7 +23,7 @@ public class Obstacle : MonoBehaviour {
 				Vector3 forceVector = new Vector3(forceX, forceY, 0);
 				
 				if (!other.GetComponent<Capacitor>().stateBackwards){
-					gameObject.rigidbody.AddForce(200f*forceVector.normalized);
+					gameObject.rigidbody.AddForce(150f*forceVector.normalized);
 				}
 			}
 		}
