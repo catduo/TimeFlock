@@ -5,13 +5,14 @@ public class LaserFan : RewindableObject<float> {
 	
 	public Transform LaserShotPrefab;
 	
-	const int ShotRate = 12;
+	const int ShotRate = 15;
 	
 	bool startRotating = false;
 	int shotCountdown = 0;
 	float rotation;
 	
 	override protected void ResetToBeginning() {
+		//base.ResetToBeginning();
 		startRotating = false;
 		rotation = -80.0f;
 		shotCountdown = ShotRate;
@@ -36,7 +37,12 @@ public class LaserFan : RewindableObject<float> {
 		}
 		
 		if (startRotating) {
-			rotation += 1.3f;
+			if (transform.position.x < -1) {
+				startRotating = false;
+				return;
+			}
+			
+			rotation += 1.2f;
 			shotCountdown -= 1;
 			if (shotCountdown <= 0) {
 				shotCountdown = ShotRate;
@@ -48,6 +54,6 @@ public class LaserFan : RewindableObject<float> {
 			}
 		}
 		
-		AddRewindState(rotation);
+		AddRewindState(rotation, false);
 	}
 }

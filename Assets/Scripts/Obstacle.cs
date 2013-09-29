@@ -23,6 +23,10 @@ public class Obstacle : MonoBehaviour {
 				Vector3 forceVector = new Vector3(forceX, forceY, 0);
 				
 				GUIControls.PlayerEnergy += 2f;
+				if (GUIControls.PlayerEnergy > GUIControls.StartingPlayerEnergy) {
+					GUIControls.PlayerEnergy = GUIControls.StartingPlayerEnergy;
+				}
+				
 				if (!other.GetComponent<Capacitor>().stateBackwards){
 					gameObject.rigidbody.AddForce(150f*forceVector.normalized);
 				}
