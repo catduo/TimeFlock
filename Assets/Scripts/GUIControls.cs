@@ -121,7 +121,6 @@ public class GUIControls : MonoBehaviour {
 	//when the game ends put up a menu that lets you restart
 	static public void GameOver(){
 		print ("Remaining energy " + PlayerEnergy);
-		PlayerEnergy = StartingPlayerEnergy;
 		
 		if(bestDistance < 10){
 			bestDistance = distance;
@@ -138,8 +137,10 @@ public class GUIControls : MonoBehaviour {
 	}
 	
 	public void ResetLevel () {
+		PlayerEnergy = StartingPlayerEnergy;
 		Time.timeScale = 1.0f;
 		IsRewinding = false;
+		distance = 0;
 		GameObject.Find ("Close").SendMessage("Reset");
 		GameObject.Find ("Far").SendMessage("Reset");
 		GameObject.Find ("Mid").SendMessage("Reset");
