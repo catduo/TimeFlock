@@ -45,6 +45,10 @@ public class GUIControls : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (Input.GetKeyDown(KeyCode.Escape)) {
+			GameObject.Find ("Menu").SendMessage("ToggleMenu");
+		}
+		
 		GetTouch();
 		GetMouse();
 		
