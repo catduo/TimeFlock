@@ -12,7 +12,7 @@ public class SlowPad : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		bis.SlowDownPressed = false;
 	}
 	
 	void Hold () {

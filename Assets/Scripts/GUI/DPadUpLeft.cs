@@ -10,7 +10,8 @@ public class DPadUpLeft : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		DPad.HAxis = 0;
+		DPad.VAxis = 0;
 	}
 	
 	void Hold () {
