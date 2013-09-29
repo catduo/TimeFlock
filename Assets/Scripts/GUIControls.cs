@@ -12,7 +12,7 @@ public class GUIControls : MonoBehaviour {
 	static public int NumBirdsUsed = 0;
 	static public float distance = 0.0f;
 	static private float bestDistance;
-	public const float StartingPlayerEnergy = 5.0f;
+	public const float StartingPlayerEnergy = 2.5f;
 	static public float PlayerEnergy = StartingPlayerEnergy;
 	
 	static public bool IsRewinding = false;
