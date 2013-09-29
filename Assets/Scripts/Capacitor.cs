@@ -10,7 +10,6 @@ public class Capacitor : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		state = 0f;
-		print ("I'm running Capacitor and I'm starting");
 	}
 	
 	// Update is called once per frame

@@ -5,13 +5,15 @@ public class GUIControls : MonoBehaviour {
 	
 	// Bounds of the screen where the birds can fly
 	public const int BoundsMinX = 2;
-	public const int BoundsMaxX = 15;
+	public const int BoundsMaxX = 20;
 	public const int BoundsMinY = 1;
 	public const int BoundsMaxY = 19;
 	
 	static public int NumBirdsUsed = 0;
 	static public float distance = 0.0f;
 	static private float bestDistance;
+	public const float StartingPlayerEnergy = 10.0f;
+	static public float PlayerEnergy = StartingPlayerEnergy;
 	
 	static public bool IsRewinding = false;
 	
@@ -36,13 +38,24 @@ public class GUIControls : MonoBehaviour {
 		distanceText.GetComponent<TextMesh>().text = "Distance: " + distance.ToString();
 		
 		GameObject.Find ("CurrentBird").GetComponent<controls>().InitState(BirdState.PlayerControlled);
+		
+		PlayerEnergy = StartingPlayerEnergy; // 30s
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		GetTouch();
 		GetMouse();
+		
+		if (!IsRewinding) {
+			PlayerEnergy -= Time.deltaTime;
+		}
+		
 		UpdateDistance();
+		
+		if (PlayerEnergy <= 0.0f) {
+			GameOver ();
+		}
 	}
 	
 	void FixedUpdate() {
@@ -107,6 +120,9 @@ public class GUIControls : MonoBehaviour {
 	
 	//when the game ends put up a menu that lets you restart
 	static public void GameOver(){
+		print ("Remaining energy " + PlayerEnergy);
+		PlayerEnergy = StartingPlayerEnergy;
+		
 		if(bestDistance < 10){
 			bestDistance = distance;
 		}
