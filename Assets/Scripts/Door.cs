@@ -13,10 +13,12 @@ public class Door : RewindableObject<float> {
 	
 	// Update is called once per frame
 	override protected void ForwardFixedUpdate () {
-		if (transform.position.x <= distance) {
-			rigidbody.velocity = new Vector3(speedX, speedY, 0);
+		if (!GUIControls.IsPaused) {
+			if (transform.position.x <= distance) {
+				rigidbody.velocity = new Vector3(speedX, speedY, 0);
+			}
+			AddRewindState(transform.position.y, false);
 		}
-		AddRewindState(transform.position.y, false);
 	}
 	
 	override protected void ApplyCustom(float y) {
