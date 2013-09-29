@@ -12,7 +12,7 @@ public class GUIControls : MonoBehaviour {
 	static public int NumBirdsUsed = 0;
 	static public float distance = 0.0f;
 	static private float bestDistance;
-	public const float StartingPlayerEnergy = 10.0f;
+	public const float StartingPlayerEnergy = 50.0f;
 	static public float PlayerEnergy = StartingPlayerEnergy;
 	
 	static public bool IsRewinding = false;
@@ -169,6 +169,7 @@ public class GUIControls : MonoBehaviour {
 			Destroy(otherBirds.transform.GetChild(childBirds).gameObject);
 		}
 		Time.timeScale = 0;
+		NumBirdsUsed = 0;
 	}
 	
 	public void WaitForStart() {

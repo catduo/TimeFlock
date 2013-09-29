@@ -28,6 +28,16 @@ public class Obstacle : MonoBehaviour {
 				}
 			}
 		}
+		else if (other.gameObject == GameObject.Find ("EndLevel")){
+			if(Application.loadedLevel < 0){
+				Application.LoadLevel(Application.loadedLevel + 1);
+			}
+			else{
+				GameObject.Find ("GUI").GetComponent<GUIControls>().RestartGame();
+				GameObject.Find ("Menu").SendMessage("MenuOn");
+				Time.timeScale = 0;
+			}
+		}
 		else {
 			if (GetComponent<controls>().Rewinding) return;
 			if (currState == BirdState.PlayerControlled) {
