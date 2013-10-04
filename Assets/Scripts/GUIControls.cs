@@ -27,6 +27,8 @@ public class GUIControls : MonoBehaviour {
 	private AudioSource audioSource;
 	
 	public Transform BirdPrefab;
+	
+	static public Vector2[] InputXYs = new Vector2[1];
 
 	// Use this for initialization
 	void Start () {
@@ -81,6 +83,7 @@ public class GUIControls : MonoBehaviour {
 	void GetTouch() {		//find everything that has a touch initiated on it and let it know
 		if(Input.touchCount > 0){
 			Touch touch = Input.GetTouch(0);
+			InputXYs[touch.fingerId] = Camera.main.ScreenToWorldPoint(touch.position);
 			if(touch.phase == TouchPhase.Began){
 	            Ray ray = Camera.main.ScreenPointToRay(touch.position);
 	            RaycastHit objectTouched ;
@@ -88,9 +91,6 @@ public class GUIControls : MonoBehaviour {
 	                 objectTouched.transform.SendMessage("Tap", SendMessageOptions.DontRequireReceiver);
 	            }
 			}
-		}		
-		if(Input.touchCount > 0){
-			Touch touch = Input.GetTouch(0);
 			if(touch.phase == TouchPhase.Stationary || touch.phase == TouchPhase.Moved){
 	            Ray ray = Camera.main.ScreenPointToRay(touch.position);
 	            RaycastHit objectTouched ;
@@ -103,6 +103,8 @@ public class GUIControls : MonoBehaviour {
 	
 	void GetMouse() {		//find everything that has the mouse click on it and let it know
 		if(Input.GetMouseButtonDown(0)){
+			InputXYs = new Vector2[1];
+			InputXYs[0] = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			Vector3 simTouch = Input.mousePosition;
 	        Ray simRay = Camera.main.ScreenPointToRay(simTouch);
 	        RaycastHit objectTouchedSim ;
@@ -111,6 +113,8 @@ public class GUIControls : MonoBehaviour {
 	        }
 		}
 		if(Input.GetMouseButton(0)){
+			InputXYs = new Vector2[1];
+			InputXYs[0] = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			Vector3 simTouch = Input.mousePosition;
 	        Ray simRay = Camera.main.ScreenPointToRay(simTouch);
 	        RaycastHit objectTouchedSim ;
@@ -119,6 +123,8 @@ public class GUIControls : MonoBehaviour {
 	        }
 		}
 		if(Input.GetMouseButtonUp(0)){
+			InputXYs = new Vector2[1];
+			InputXYs[0] = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			Vector3 simTouch = Input.mousePosition;
 	        Ray simRay = Camera.main.ScreenPointToRay(simTouch);
 	        RaycastHit objectTouchedSim ;

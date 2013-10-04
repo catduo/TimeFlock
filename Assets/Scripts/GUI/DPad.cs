@@ -2,31 +2,63 @@ using UnityEngine;
 using System.Collections;
 
 public class DPad : MonoBehaviour {
-	
-	static public int HAxis = 0;
-	static public int VAxis = 0;
+
+	private bool held = false;
+	private bool heldPrevious = false;
+	static public float vertical = 0;
+	static public float horizontal = 0;
+	public bool binaryInputs;
+	public float diagonalSensitivity = 0.5F;
 	public GameObject bird;
 	BirdInputState bis;
-	
+
 	// Use this for initialization
 	void Start () {
 		bird = GameObject.Find("CurrentBird");
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		bis.VAxis = VAxis;
-		bis.HAxis = HAxis;
-		if(HAxis != 0 || VAxis != 0){
-			bird.GetComponent<controls>().ApplyInputs(bis);
+
+	void FixedUpdate () {
+		Debug.Log(horizontal.ToString() + "," + vertical.ToString());
+		if(heldPrevious){
+			vertical = (GUIControls.InputXYs[0].y - transform.position.y) / transform.lossyScale.z * 0.5F;
+			horizontal = (GUIControls.InputXYs[0].x - transform.position.x) / transform.lossyScale.x * 0.5F;
+			if(binaryInputs){
+				if(vertical > diagonalSensitivity * Mathf.Abs(horizontal)){
+					vertical = 1;
+				}
+				else if(vertical < - diagonalSensitivity * Mathf.Abs(horizontal)){
+					vertical = -1;
+				}
+				else{
+					vertical = 0;
+				}
+				if(horizontal > diagonalSensitivity * Mathf.Abs(vertical)){
+					horizontal = 1;
+				}
+				else if(horizontal < - diagonalSensitivity * Mathf.Abs(vertical)){
+					horizontal = -1;
+				}
+				else{
+					horizontal = 0;
+				}
+			}
 		}
+		else{
+			vertical = 0;
+			horizontal = 0;
+		}
+		if(!held){
+			heldPrevious = false;
+		}
+		held = false;
 	}
-	
-	public void clearControls() {
-		print ("clear controls");
-		bis.VAxis = 0;
-		bis.HAxis = 0;
-		bis.SlowDownPressed = false;
-		bird.GetComponent<controls>().ApplyInputs(bis);
+
+	void Hold () {
+		held = true;
+		heldPrevious = true;
+	}
+
+	void Tap () {
+		Hold();
 	}
 }

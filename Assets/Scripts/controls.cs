@@ -168,6 +168,8 @@ public class controls : RewindableObject<bool> {
 		if (Input.GetKey (KeyCode.D) || Input.GetKey(KeyCode.RightArrow)){
 			bis.HAxis += 1;
 		}
+		bis.HAxis += Mathf.RoundToInt(DPad.horizontal);
+		bis.VAxis += Mathf.RoundToInt(DPad.vertical);
 		
 		if (Input.GetKey(KeyCode.Space)) {
 			bis.SlowDownPressed = true;
