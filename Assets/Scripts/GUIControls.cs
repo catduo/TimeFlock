@@ -19,6 +19,9 @@ public class GUIControls : MonoBehaviour {
 	static public bool IsSlowing = false;
 	static public bool IsPaused = false;
 	
+	private bool is_ftue = true;
+	private bool is_logo = true;
+	public Texture2D logo;
 	
 	private GameObject menu;
 	private GameObject mainCamera;
@@ -143,11 +146,6 @@ public class GUIControls : MonoBehaviour {
 		distanceText.GetComponent<TextMesh>().text = "Distance: " + Mathf.RoundToInt (distance).ToString();
 	}
 	
-	static public void initBirdControls(GameObject bird){
-		GameObject.Find("DPad").GetComponent<DPad>().bird = bird;
-		GameObject.Find("SlowPad").GetComponent<SlowPad>().bird = bird;
-	}
-	
 	//when the game ends put up a menu that lets you restart
 	static public void GameOver(){
 		print ("Remaining energy " + PlayerEnergy);
@@ -222,5 +220,25 @@ public class GUIControls : MonoBehaviour {
 			ret.Add (t.gameObject);
 		}
 		return ret;
+	}
+	
+	void OnGUI(){
+		GUI.skin.box.wordWrap = true;
+		if(is_logo){
+			IsPaused = true;
+			Time.timeScale = 0;
+			GUI.DrawTexture(new Rect(Screen.width/2 - 320, 20, 640, 380), logo);
+			if(GUI.Button(new Rect(Screen.width/2 - 320, 420, 640, 30), "Continue")){
+				is_logo = false;
+			}
+		}
+		else if(is_ftue){
+			if(GUI.Button(new Rect(Screen.width/2 - 320, 420, 640, 30), "Start!")){
+				is_ftue = false;
+				IsPaused = false;
+				Time.timeScale = 1;
+			}
+			GUI.Box(new Rect(Screen.width/2 - 320, 20, 640, 380), "Welcome to TimeFlock\n\nYou are playing as a robin that swallowed a time control device and is trying to escape an airforce base\n\nWhen you touch anything you will trigger the time control device, causing you to go back in time to the point when you ate it\n\nTo control the bird use the left side of the screen as a directional pad; touch to engage and move your finger to move the bird\n\n Touching the right side of the screen will cause the bird to use the device to slow time\n\nYou can only slow time a limited amount, indicated by the meter at the top of the screen\n\nIf you are close to one of your previous lives' explosions you can pick up some of the time power and replenish the meter\n\n Attempt to make it out of the airforce base, it should take a little over a minute on a perfect run");
+		}
 	}
 }
