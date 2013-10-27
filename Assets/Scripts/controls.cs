@@ -30,7 +30,6 @@ public class controls : RewindableObject<bool> {
 	
 	private bool is_dpadUse = false;
 	private int dpadTouch = -1;
-	private int slowDownTouch = -1;
 	private float initialX = 0;
 	private float initialY = 0;
 	
@@ -178,54 +177,51 @@ public class controls : RewindableObject<bool> {
 			bis.SlowDownPressed = true;
 		}
 		
-		for (int i = 0; i < Input.touchCount; i++){
-			Touch touch = Input.GetTouch(i);
-			if(touch.phase == TouchPhase.Began && Camera.main.ScreenToWorldPoint(touch.position).x < 13){
-				dpadTouch = touch.fingerId;
-				initialX = touch.position.x;
-				initialY = touch.position.y;
+		bis.SlowDownPressed = false;
+		if(!Menu.menuIsOn){
+			for (int i = 0; i < Input.touchCount; i++){
+				Touch touch = Input.GetTouch(i);
+				if(touch.phase == TouchPhase.Began && Camera.main.ScreenToWorldPoint(touch.position).x < 13){
+					dpadTouch = touch.fingerId;
+					initialX = touch.position.x;
+					initialY = touch.position.y;
+				}
+				else if(Camera.main.ScreenToWorldPoint(touch.position).x > 13){
+					bis.SlowDownPressed = true;
+				}
+				is_dpadUse = true;
 			}
-			else if(touch.phase == TouchPhase.Began && Camera.main.ScreenToWorldPoint(touch.position).x > 13){
-				slowDownTouch = touch.fingerId;
-			}
-			is_dpadUse = true;
-		}
-		if(dpadTouch > -1){
-			if(Input.GetTouch(dpadTouch).phase == TouchPhase.Canceled || Input.GetTouch(dpadTouch).phase == TouchPhase.Ended){
-				is_dpadUse = false;
-				dpadTouch = -1;
-			}
-			if(is_dpadUse){
-				Touch touch = Input.GetTouch(dpadTouch);
-				if(touch.position.x - initialX > 100){
-					bis.HAxis = 1;
-				}
-				else if(touch.position.x - initialX < -100){
-					bis.HAxis = -1;
-				}
-				else{
-					bis.HAxis = (touch.position.x - initialX)/100;
-				}
-				if(touch.position.y - initialY > 100){
-					bis.VAxis = 1;
-				}
-				else if(touch.position.y - initialY < -100){
-					bis.VAxis = -1;
-				}
-				else{
-					bis.VAxis = (touch.position.y - initialY)/100;
-				}
-			}
-			else{
-				bis.VAxis = 0;
-				bis.HAxis = 0;
-				dpadTouch = -1;
-			}
-			if(slowDownTouch > -1){
+			if(dpadTouch > -1){
 				if(Input.GetTouch(dpadTouch).phase == TouchPhase.Canceled || Input.GetTouch(dpadTouch).phase == TouchPhase.Ended){
-					slowDownTouch = -1;
+					is_dpadUse = false;
+					dpadTouch = -1;
 				}
-				bis.SlowDownPressed = true;
+				if(is_dpadUse){
+					Touch touch = Input.GetTouch(dpadTouch);
+					if(touch.position.x - initialX > 100){
+						bis.HAxis = 1;
+					}
+					else if(touch.position.x - initialX < -100){
+						bis.HAxis = -1;
+					}
+					else{
+						bis.HAxis = (touch.position.x - initialX)/100;
+					}
+					if(touch.position.y - initialY > 100){
+						bis.VAxis = 1;
+					}
+					else if(touch.position.y - initialY < -100){
+						bis.VAxis = -1;
+					}
+					else{
+						bis.VAxis = (touch.position.y - initialY)/100;
+					}
+				}
+				else{
+					bis.VAxis = 0;
+					bis.HAxis = 0;
+					dpadTouch = -1;
+				}
 			}
 		}
 		

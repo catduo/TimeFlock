@@ -5,7 +5,7 @@ public class Menu : MonoBehaviour {
 	
 	private TextMesh thisDistance;
 	private TextMesh numLives;
-	public bool menuIsOn = false;
+	static public bool menuIsOn = false;
 	
 	// Use this for initialization
 	void Start () {
