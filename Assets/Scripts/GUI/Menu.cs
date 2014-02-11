@@ -40,6 +40,7 @@ public class Menu : MonoBehaviour {
 	void MenuOff() {
 		menuIsOn = false;
 		Time.timeScale = 1;
+		GUIControls.IsPaused = false;
 		if(transform.position.y != 100){
 			transform.position = new Vector3(13, 100, -9);
 		}

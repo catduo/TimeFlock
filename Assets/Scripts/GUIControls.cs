@@ -200,11 +200,12 @@ public class GUIControls : MonoBehaviour {
 	
 	public void RestartGame () {
 		ResetLevel ();
+		IsPaused = true;
+		Time.timeScale = 0;
 		GameObject otherBirds = GameObject.Find ("OtherBirds");
 		for(int childBirds = 0; childBirds < otherBirds.transform.childCount; childBirds++){
 			Destroy(otherBirds.transform.GetChild(childBirds).gameObject);
 		}
-		Time.timeScale = 0;
 		NumBirdsUsed = 0;
 	}
 	
@@ -221,8 +222,10 @@ public class GUIControls : MonoBehaviour {
 		}
 		return ret;
 	}
-	
+
+	int ftuelocation = 0;
 	void OnGUI(){
+		GUI.skin.box.fontSize = 50;
 		GUI.skin.box.wordWrap = true;
 		if(is_logo){
 			IsPaused = true;
@@ -233,12 +236,58 @@ public class GUIControls : MonoBehaviour {
 			}
 		}
 		else if(is_ftue){
-			if(GUI.Button(new Rect(Screen.width/2 - 320, 420, 640, 30), "Start!")){
-				is_ftue = false;
-				IsPaused = false;
-				Time.timeScale = 1;
+			switch(ftuelocation){
+			case 0:
+				GUI.Box(new Rect(Screen.width/2 - 320, 20, 640, 380), "Welcome to TimeFlock");
+				if(GUI.Button(new Rect(Screen.width/2 - 320, 420, 640, 30), "Next")){
+					ftuelocation++;
+				}
+				break;
+				
+			case 1:
+				GUI.Box(new Rect(Screen.width/2 - 320, 20, 640, 380), "You are playing as a robin that swallowed a time control device and is trying to escape an airforce base");
+				if(GUI.Button(new Rect(Screen.width/2 - 320, 420, 640, 30), "Next")){
+					ftuelocation++;
+				}
+				break;
+				
+			case 2:
+				GUI.Box(new Rect(Screen.width/2 - 320, 20, 640, 380), "When you touch anything you will trigger the time control device, causing you to go back in time to the point when you ate it");
+				if(GUI.Button(new Rect(Screen.width/2 - 320, 420, 640, 30), "Next")){
+					ftuelocation++;
+				}
+				break;
+				
+			case 3:
+				GUI.Box(new Rect(Screen.width/2 - 320, 20, 640, 380), "To control the bird use the left side of the screen as a directional pad; touch to engage and move your finger to move the bird");
+				if(GUI.Button(new Rect(Screen.width/2 - 320, 420, 640, 30), "Next")){
+					ftuelocation++;
+				}
+				break;
+				
+			case 4:
+				GUI.Box(new Rect(Screen.width/2 - 320, 20, 640, 380), "Touching the right side of the screen will cause the bird to use the device to slow time");
+				if(GUI.Button(new Rect(Screen.width/2 - 320, 420, 640, 30), "Next")){
+					ftuelocation++;
+				}
+				break;
+				
+			case 5:
+				GUI.Box(new Rect(Screen.width/2 - 320, 20, 640, 380), "If you are close to one of your previous lives' explosions you can pick up some of the time power and replenish the meter");
+				if(GUI.Button(new Rect(Screen.width/2 - 320, 420, 640, 30), "Next")){
+					ftuelocation++;
+				}
+				break;
+				
+			default:
+				GUI.Box(new Rect(Screen.width/2 - 320, 20, 640, 380), "Attempt to make it out of the airforce base, it should take a little over a minute on a perfect run");
+				if(GUI.Button(new Rect(Screen.width/2 - 320, 420, 640, 30), "Start!")){
+					is_ftue = false;
+					IsPaused = false;
+					Time.timeScale = 1;
+				}
+				break;
 			}
-			GUI.Box(new Rect(Screen.width/2 - 320, 20, 640, 380), "Welcome to TimeFlock\n\nYou are playing as a robin that swallowed a time control device and is trying to escape an airforce base\n\nWhen you touch anything you will trigger the time control device, causing you to go back in time to the point when you ate it\n\nTo control the bird use the left side of the screen as a directional pad; touch to engage and move your finger to move the bird\n\n Touching the right side of the screen will cause the bird to use the device to slow time\n\nYou can only slow time a limited amount, indicated by the meter at the top of the screen\n\nIf you are close to one of your previous lives' explosions you can pick up some of the time power and replenish the meter\n\n Attempt to make it out of the airforce base, it should take a little over a minute on a perfect run");
 		}
 		else{
 			if(GUI.Button(new Rect(0, 0, 150, 50), "Menu")){
