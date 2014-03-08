@@ -173,11 +173,11 @@ public class controls : RewindableObject<bool> {
 		bis.HAxis += Mathf.RoundToInt(DPad.horizontal);
 		bis.VAxis += Mathf.RoundToInt(DPad.vertical);
 		
+		bis.SlowDownPressed = false;
 		if (Input.GetKey(KeyCode.Space)) {
 			bis.SlowDownPressed = true;
 		}
-		
-		bis.SlowDownPressed = false;
+
 		if(!Menu.menuIsOn){
 			for (int i = 0; i < Input.touchCount; i++){
 				Touch touch = Input.GetTouch(i);
